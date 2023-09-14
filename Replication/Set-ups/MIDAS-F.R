@@ -37,13 +37,14 @@ start_time <- Sys.time()
   # ============================================================================
 
   # VARIANT A: only take first factor on board, across all 126 specs; corrected version of what is in paper now  ####
+  # WARNING: On Github you can only test i =1, i = 343 and i = 685
   # ================================================================================================================ #
   # i = 1            # spec 1: 1 factor, 1 lag - LagOrder 0/ LagOrder 1/ LagOrder 2/ LagOrder 3 converges (standard setting)
   # i = 343          # spec 2: 2 factors, 1 lag - LagOrder 0 converges
-  # i = 685          # spec 3: 3 factors, 1 lag - LagOrder 0 converges
+  i = 685          # spec 3: 3 factors, 1 lag - LagOrder 0 converges
   # i = 1027         # spec 4: 4 factors, 1 lag  - LagOrder 0 converges
   # i = 1369         # spec 5: 5 factors, 1 lag- LagOrder 0 converges
-  i = 1711         # spec 6: 6 factors, 1 lag
+  # i = 1711         # spec 6: 6 factors, 1 lag
 
 
   data             <- readMat(myFiles[i])
