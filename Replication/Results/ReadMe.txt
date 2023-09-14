@@ -1,0 +1,1 @@
+Outcomes written to DM and RMSFE. The fcst and other output in the model setus written to root. Later placed in fsct (all forecasts), other (all other outcome)
