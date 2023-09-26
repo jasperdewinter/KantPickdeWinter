@@ -159,7 +159,7 @@ if (saveFlag == 1) {
   fileName_feat    <- paste("fcst feat values", modelName, ".xlsx")
   fileName_var     <- paste("fcst coeff var", modelName, ".xlsx")
 
-    write.xlsx(FcstSave, file=fileName_results, sheetName="Fcst Results", 
+  write.xlsx(FcstSave, file=fileName_results, sheetName="Fcst Results", 
              col.names=TRUE, row.names=TRUE, append=FALSE)
   write.xlsx(FcstSave_RMSE, file =fileName_RMSE, sheetName="Fcst Results RMSE", 
              col.names=TRUE, row.names=TRUE, append=FALSE)
@@ -172,105 +172,317 @@ if (saveFlag == 1) {
 }
 
 ######################################## Contributions calculations ###############################
-######################### Contributions #############################
+
+# Load file with outcomes
+rm(list=ls())
+ROOT <- rprojroot::find_rstudio_root_file()  # !!!! Adjust main path
+Sys.setenv(TZ ="UTC")
+load(paste0(ROOT,"/Results/fcst/Raw RF/0.6/RF_0.6.RData"))
+library(tidyverse)
+library(data.table)
+
+######################## Contributions #############################
 # setwd('C:/Users/Dennis/Documents/Study/Thesis/Analysis/Forecast contributions/RF/Overall results')
 # contributions <- read.xlsx('fcst coeff Random Forest Shapley overall.xlsx', 1)[,-1]
 # FcstSave <- read.xlsx('fcst results Random Forest Shapley overall.xlsx',1)
-# 
-# setwd('C:/Users/Dennis/Documents/Study/Thesis/Analysis/Forecast contributions/RF')
-# # contributions_avg <- contributions_avg[,-dim(contributions_avg)[2]]
-# index <- vector(mode="list", 11) # Store relevant indices to retrieve contributions for a specific forecast differential
-# 
-# for (a in 1:length(index)) {
-#   element_id <- seq(a+4,1368,12)
-#   index[[a]] <- element_id
-# }
-# 
-# # Average contributions over forecast horizon
-# # GM  <- 20:67 ########
-# GM  <- 1:64 ########
-# FC  <- 65:79
-# PFC <- 80:108
-# period <- c(GM, FC, PFC)
-# period_contributions <- matrix(NA, length(index), 252)
-# 
-# # Horizon predictions
-# back_avg <- rowMeans(FcstSave[(4:111),(5:6)][period,])
-# now_avg  <- rowMeans(FcstSave[(4:111),(7:9)][period,])
-# f1_avg   <- rowMeans(FcstSave[(4:111),(10:12)][period,])
-# f2_avg   <- rowMeans(FcstSave[(4:111),(13:15)][period,])
-# dates <- seq(as.Date("1992-03-01"), as.Date("2018-12-01"), "quarters")
-# 
-# # avg_contributions <- matrix(NA, length(index), 252)
-# # period_contributions <- matrix(NA, length(index), 252)
-# period_contributions <- list(mode="list", 2)
-# perc_contr <- matrix(NA, length(period), 252)
-# for (b in 1:2) {
-#   
-#   for (j in 4:111) {
-#     perc_contr[(j-3),] <- as.numeric(abs(contributions[index[[b]],][j,]) / sum( abs( contributions[index[[b]],][j,] ) ))
-#   }
-#   
-#   perc_contr <- perc_contr[period,]
-#   # row <- length(perc_contr[ !is.na(perc_contr) ]) / 252
-#   # perc_matrix <- matrix(perc_contr[ !is.na(perc_contr) ],nrow = row, ncol=252)
-#   #period_contributions[b,] <- colMeans( perc_matrix )
-#   period_contributions[[b]] <- perc_contr
-#   perc_contr <- matrix(NA, length(period), 252)
-# }
-# 
-# # Categories
-# prod_sales <- 1:63
-# surveys    <- 64:171
-# financial  <- 172:195
-# prices     <- 196:237
-# other      <- 238:251
-# 
-# back_contributions <- Reduce("+", period_contributions) / length(period_contributions)
-# categories <- list(prod_sales,surveys,financial,prices,other)
-# category_contributions <- rep(NA, length(period)*5)
-# 
-# 
-# for (t in 1:length(period)) {
-#   for (cat_nr in 1:5) {
-#     cat <- unlist(categories[[cat_nr]])
-#     category_contributions[(5*(t-1) + cat_nr)] <- sum(back_contributions[t,cat])
-#   }
-#   category_contributions[((1+(t-1)*5):(t*5))] <- category_contributions[((1+(t-1)*5):(t*5))] * back_avg[t]
-# }
-# 
-# category <- c("Production & Sales", "Surveys", "Financial", "Prices", "Other")
-# category_rep <- rep(category, length(period))
-# df_back_avg <- rep(back_avg, each = 5)
-# df_dates    <- rep(dates[period], each = 5)
-# 
-# 
-# df_plot <- data.frame(df_back_avg, df_dates, category_rep, category_contributions ) # Add all relevant ...
-# 
-# 
-# p <- ggplot(df_plot, aes(x = df_dates, y = category_contributions)) +  
-#   # geom_bar(aes(x = df_dates, fill = category_rep), colour= "black", size = .00001, stat="identity") + 
-#   geom_bar(aes(x = df_dates, fill = category_rep), stat="identity", width=105) +
-#   geom_line(aes(x= df_dates, df_back_avg), size = 0.6) + # + geom_line(aes(x=df_dates, df_y), linetype = "dashed")
-#   scale_fill_manual(values=c("#9999CC", "brown", "#66CC99","orange","#CC6666")) + 
-#   scale_colour_manual(values=c("#9999CC", "brown", "#66CC99","orange","#CC6666")) + 
-#   
-# 
-# p <- p + theme( # remove the vertical grid lines 
-#   panel.grid.major.x = element_blank() ,
-#   # explicitly set the horizontal lines (or they will disappear too)
-#   panel.grid.major.y = element_line( size=.1, color="grey" ),
-#   panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=0.5), aspect.ratio=1) +
-#   scale_x_date(limits = as.Date(c(dates[1],dates[length(period)-1])))  
-# 
-# p <- p + labs(title = "RF backcast contribution", x = "Years", y = "GDP growth (%)") +
-#   theme(plot.title = element_text(hjust = 0.5, size = 26,face="bold"), axis.text=element_text(size=16),
-#         axis.title=element_text(size=20),# legend.position = c(0.85,0.15),
-#         legend.position = "bottom", legend.background = element_rect(color = "black", fill = "white", size = 0.5, linetype = "solid") ) + 
-#   labs(fill = "Category", face = "bold")
-# 
-# p
-# 
-# pdf("RF_contributions_back.pdf")
-# p
-# dev.off()
+contributions <- shap_coeff
+index <- vector(mode="list", 11) # Store relevant indices to retrieve contributions for a specific forecast differential
+
+for (a in 1:length(index)) {
+  element_id <- seq(a+4, 1368, 12)
+  index[[a]] <- element_id
+}
+
+# Pre-allocate memory for forecast Great Moderation (GM), Financial crisis (FC) and Post Financial Crisis (PFC)
+GM  <- 1:64
+FC  <- 65:79
+PFC <- 80:108
+period <- c(GM, FC, PFC)
+period_contributions <- matrix(NA, length(index), 252)
+
+# Indices categories (5 in total)
+prod_sales <- 1:63
+surveys    <- 64:171
+financial  <- 172:195
+prices     <- 196:237
+other      <- 238:251
+
+# Horizon predictions
+back_avg <- rowMeans(FcstSave[(4:111),(5:6)][period,])
+now_avg  <- rowMeans(FcstSave[(4:111),(7:9)][period,])
+f1_avg   <- rowMeans(FcstSave[(4:111),(10:12)][period,])
+f2_avg   <- rowMeans(FcstSave[(4:111),(13:15)][period,])
+dates <- seq(as.Date("1992-03-01"), as.Date("2018-12-01"), "quarters")
+
+# Graphs backcast, nowcast, 1 quarter and 2 quarter ahead forecasts ####
+# ==================================================================== #
+
+## Backcast quarterly average ####
+
+# Backcast contributions per period
+
+period_contributions <- list(mode="list", 2)
+perc_contr <- matrix(NA, length(period), 251)
+for (b in 1:2) {
+  for (j in 4:111) {
+    perc_contr[(j-3),] <- abs(contributions[index[[b]],][j,-1]) / sum( abs( contributions[index[[b]],][j,-1] ) )
+  }
+  
+  perc_contr <- perc_contr[period,]
+  period_contributions[[b]] <- perc_contr
+  perc_contr <- matrix(NA, length(period), 251)
+}
+
+now_contributions <- Reduce("+", period_contributions) / length(period_contributions)
+categories <- list(prod_sales,surveys,financial,prices,other)
+category_contributions <- rep(NA, length(period)*5)
+
+
+for (t in 1:length(period)) {
+  for (cat_nr in 1:5) {
+    cat <- unlist(categories[[cat_nr]])
+    category_contributions[(5*(t-1) + cat_nr)] <- sum(now_contributions[t,cat])
+  }
+  category_contributions[((1+(t-1)*5):(t*5))] <- category_contributions[((1+(t-1)*5):(t*5))] * now_avg[t]
+}
+
+category <- c("Production & Sales", "Surveys", "Financial", "Prices", "Other")
+category_rep <- rep(category, length(period))
+df_now_avg <- rep(now_avg, each = 5)
+df_dates    <- rep(dates[period], each = 5)
+
+
+df_plot <- data.frame(df_now_avg, df_dates, category_rep, category_contributions ) # Add all relevant ...
+
+
+p <- ggplot(df_plot, aes(x = df_dates, y = category_contributions)) +
+  # geom_bar(aes(x = df_dates, fill = category_rep), colour= "black", size = .00001, stat="identity") +
+  geom_bar(aes(x = df_dates, fill = category_rep), stat="identity", width=105) +
+  geom_line(aes(x= df_dates, df_now_avg), size = 0.6) + # + geom_line(aes(x=df_dates, df_y), linetype = "dashed")
+  scale_fill_manual(values=c("#9999CC", "brown", "#66CC99","orange","#CC6666")) +
+  scale_colour_manual(values=c("#9999CC", "brown", "#66CC99","orange","#CC6666"))
+
+p <- p + theme( # remove the vertical grid lines
+  panel.grid.major.x = element_blank() ,
+  # explicitly set the horizontal lines (or they will disappear too)
+  panel.grid.major.y = element_line( size=.1, color="grey" ),
+  panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=0.5), aspect.ratio=1) +
+  scale_x_date(limits = as.Date(c(dates[1],dates[length(period)-1])))
+
+p <- p + labs(title = "RF 1 backcast contribution", x = "Years", y = "GDP growth (%)") +
+  theme(plot.title = element_text(hjust = 0.5, size = 26,face="bold"), axis.text=element_text(size=16),
+        axis.title=element_text(size=20),# legend.position = c(0.85,0.15),
+        legend.position = "bottom", legend.background = element_rect(color = "black", fill = "white", size = 0.5, linetype = "solid") ) +
+  labs(fill = "Category", face = "bold")
+
+p
+#
+pdf(paste0(ROOT,"/Results/graphs/RF_contributions_back.pdf"))
+p
+dev.off()
+
+
+## Nowcast quarterly average ####
+
+# Nowcast contributions per period
+
+period_contributions <- list(mode="list", 3)
+perc_contr <- matrix(NA, length(period), 251)
+for (b in 3:5) {
+  
+  for (j in 4:111) {
+    perc_contr[(j-3),] <- abs(contributions[index[[b]],][j,-1]) / sum( abs( contributions[index[[b]],][j,-1] ) )
+  }
+  
+  perc_contr <- perc_contr[period,]
+  # row <- length(perc_contr[ !is.na(perc_contr) ]) / 252
+  # perc_matrix <- matrix(perc_contr[ !is.na(perc_contr) ],nrow = row, ncol=252)
+  #period_contributions[b,] <- colMeans( perc_matrix )
+  period_contributions[[b-2]] <- perc_contr
+  perc_contr <- matrix(NA, length(period), 251)
+}
+
+now_contributions <- Reduce("+", period_contributions) / length(period_contributions)
+categories <- list(prod_sales,surveys,financial,prices,other)
+category_contributions <- rep(NA, length(period)*5)
+
+
+for (t in 1:length(period)) {
+  for (cat_nr in 1:5) {
+    cat <- unlist(categories[[cat_nr]])
+    category_contributions[(5*(t-1) + cat_nr)] <- sum(now_contributions[t,cat])
+  }
+  category_contributions[((1+(t-1)*5):(t*5))] <- category_contributions[((1+(t-1)*5):(t*5))] * now_avg[t]
+}
+
+category <- c("Production & Sales", "Surveys", "Financial", "Prices", "Other")
+category_rep <- rep(category, length(period))
+df_now_avg <- rep(now_avg, each = 5)
+df_dates    <- rep(dates[period], each = 5)
+
+
+df_plot <- data.frame(df_now_avg, df_dates, category_rep, category_contributions ) # Add all relevant ...
+
+
+p <- ggplot(df_plot, aes(x = df_dates, y = category_contributions)) +
+  # geom_bar(aes(x = df_dates, fill = category_rep), colour= "black", size = .00001, stat="identity") +
+  geom_bar(aes(x = df_dates, fill = category_rep), stat="identity", width=105) +
+  geom_line(aes(x= df_dates, df_now_avg), size = 0.6) + # + geom_line(aes(x=df_dates, df_y), linetype = "dashed")
+  scale_fill_manual(values=c("#9999CC", "brown", "#66CC99","orange","#CC6666")) +
+  scale_colour_manual(values=c("#9999CC", "brown", "#66CC99","orange","#CC6666"))
+
+p <- p + theme( # remove the vertical grid lines
+  panel.grid.major.x = element_blank() ,
+  # explicitly set the horizontal lines (or they will disappear too)
+  panel.grid.major.y = element_line( size=.1, color="grey" ),
+  panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=0.5), aspect.ratio=1) +
+  scale_x_date(limits = as.Date(c(dates[1],dates[length(period)-1])))
+
+p <- p + labs(title = "RF nowcast contribution", x = "Years", y = "GDP growth (%)") +
+  theme(plot.title = element_text(hjust = 0.5, size = 26,face="bold"), axis.text=element_text(size=16),
+        axis.title=element_text(size=20),# legend.position = c(0.85,0.15),
+        legend.position = "bottom", legend.background = element_rect(color = "black", fill = "white", size = 0.5, linetype = "solid") ) +
+  labs(fill = "Category", face = "bold")
+
+p
+#
+pdf(paste0(ROOT,"/Results/graphs/RF_contributions_now.pdf"))
+p
+dev.off()
+
+## 1 quarter ahead quarterly average ####
+
+# 1 quarter ahead contributions per period
+
+period_contributions <- list(mode="list", 3)
+perc_contr <- matrix(NA, length(period), 251)
+for (b in 6:8) {
+  
+  for (j in 4:111) {
+    perc_contr[(j-3),] <- abs(contributions[index[[b]],][j,-1]) / sum( abs( contributions[index[[b]],][j,-1] ) )
+  }
+  
+  perc_contr <- perc_contr[period,]
+  # row <- length(perc_contr[ !is.na(perc_contr) ]) / 252
+  # perc_matrix <- matrix(perc_contr[ !is.na(perc_contr) ],nrow = row, ncol=252)
+  #period_contributions[b,] <- colMeans( perc_matrix )
+  period_contributions[[b-5]] <- perc_contr
+  perc_contr <- matrix(NA, length(period), 251)
+}
+
+f1_contributions <- Reduce("+", period_contributions) / length(period_contributions)
+categories <- list(prod_sales,surveys,financial,prices,other)
+category_contributions <- rep(NA, length(period)*5)
+
+
+for (t in 1:length(period)) {
+  for (cat_nr in 1:5) {
+    cat <- unlist(categories[[cat_nr]])
+    category_contributions[(5*(t-1) + cat_nr)] <- sum(f1_contributions[t,cat])
+  }
+  category_contributions[((1+(t-1)*5):(t*5))] <- category_contributions[((1+(t-1)*5):(t*5))] * f1_avg[t]
+}
+
+category <- c("Production & Sales", "Surveys", "Financial", "Prices", "Other")
+category_rep <- rep(category, length(period))
+df_f1_avg <- rep(f1_avg, each = 5)
+df_dates    <- rep(dates[period], each = 5)
+
+
+df_plot <- data.frame(df_f1_avg, df_dates, category_rep, category_contributions ) # Add all relevant ...
+
+
+p <- ggplot(df_plot, aes(x = df_dates, y = category_contributions)) +
+  # geom_bar(aes(x = df_dates, fill = category_rep), colour= "black", size = .00001, stat="identity") +
+  geom_bar(aes(x = df_dates, fill = category_rep), stat="identity", width=105) +
+  geom_line(aes(x= df_dates, df_f1_avg), size = 0.6) + # + geom_line(aes(x=df_dates, df_y), linetype = "dashed")
+  scale_fill_manual(values=c("#9999CC", "brown", "#66CC99","orange","#CC6666")) +
+  scale_colour_manual(values=c("#9999CC", "brown", "#66CC99","orange","#CC6666"))
+
+p <- p + theme( # remove the vertical grid lines
+  panel.grid.major.x = element_blank() ,
+  # explicitly set the horizontal lines (or they will disappear too)
+  panel.grid.major.y = element_line( size=.1, color="grey" ),
+  panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=0.5), aspect.ratio=1) +
+  scale_x_date(limits = as.Date(c(dates[1],dates[length(period)-1])))
+
+p <- p + labs(title = "RF 1Q quarter ahead contribution", x = "Years", y = "GDP growth (%)") +
+  theme(plot.title = element_text(hjust = 0.5, size = 26,face="bold"), axis.text=element_text(size=16),
+        axis.title=element_text(size=20),# legend.position = c(0.85,0.15),
+        legend.position = "bottom", legend.background = element_rect(color = "black", fill = "white", size = 0.5, linetype = "solid") ) +
+  labs(fill = "Category", face = "bold")
+
+p
+#
+pdf(paste0(ROOT,"/Results/graphs/RF_contributions_1q.pdf"))
+p
+dev.off()
+
+## 2 quarter ahead quarterly average ####
+
+# 2 quarter ahead contributions per period
+
+period_contributions <- list(mode="list", 3)
+perc_contr <- matrix(NA, length(period), 251)
+for (b in 9:11) {
+  
+  for (j in 4:111) {
+    perc_contr[(j-3),] <- abs(contributions[index[[b]],][j,-1]) / sum( abs( contributions[index[[b]],][j,-1] ) )
+  }
+  
+  perc_contr <- perc_contr[period,]
+  # row <- length(perc_contr[ !is.na(perc_contr) ]) / 252
+  # perc_matrix <- matrix(perc_contr[ !is.na(perc_contr) ],nrow = row, ncol=252)
+  #period_contributions[b,] <- colMeans( perc_matrix )
+  period_contributions[[b-8]] <- perc_contr
+  perc_contr <- matrix(NA, length(period), 251)
+}
+
+f2_contributions <- Reduce("+", period_contributions) / length(period_contributions)
+categories <- list(prod_sales,surveys,financial,prices,other)
+category_contributions <- rep(NA, length(period)*5)
+
+
+for (t in 1:length(period)) {
+  for (cat_nr in 1:5) {
+    cat <- unlist(categories[[cat_nr]])
+    category_contributions[(5*(t-1) + cat_nr)] <- sum(f2_contributions[t,cat])
+  }
+  category_contributions[((1+(t-1)*5):(t*5))] <- category_contributions[((1+(t-1)*5):(t*5))] * f2_avg[t]
+}
+
+category <- c("Production & Sales", "Surveys", "Financial", "Prices", "Other")
+category_rep <- rep(category, length(period))
+df_f2_avg <- rep(f2_avg, each = 5)
+df_dates    <- rep(dates[period], each = 5)
+
+
+df_plot <- data.frame(df_f2_avg, df_dates, category_rep, category_contributions ) # Add all relevant ...
+
+
+p <- ggplot(df_plot, aes(x = df_dates, y = category_contributions)) +
+  # geom_bar(aes(x = df_dates, fill = category_rep), colour= "black", size = .00001, stat="identity") +
+  geom_bar(aes(x = df_dates, fill = category_rep), stat="identity", width=105) +
+  geom_line(aes(x= df_dates, df_f2_avg), size = 0.6) + # + geom_line(aes(x=df_dates, df_y), linetype = "dashed")
+  scale_fill_manual(values=c("#9999CC", "brown", "#66CC99","orange","#CC6666")) +
+  scale_colour_manual(values=c("#9999CC", "brown", "#66CC99","orange","#CC6666"))
+
+p <- p + theme( # remove the vertical grid lines
+  panel.grid.major.x = element_blank() ,
+  # explicitly set the horizontal lines (or they will disappear too)
+  panel.grid.major.y = element_line( size=.1, color="grey" ),
+  panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=0.5), aspect.ratio=1) +
+  scale_x_date(limits = as.Date(c(dates[1],dates[length(period)-1])))
+
+p <- p + labs(title = "RF 2Q ahead contribution", x = "Years", y = "GDP growth (%)") +
+  theme(plot.title = element_text(hjust = 0.5, size = 26,face="bold"), axis.text=element_text(size=16),
+        axis.title=element_text(size=20),# legend.position = c(0.85,0.15),
+        legend.position = "bottom", legend.background = element_rect(color = "black", fill = "white", size = 0.5, linetype = "solid") ) +
+  labs(fill = "Category", face = "bold")
+
+p
+#
+pdf(paste0(ROOT,"/Results/graphs/RF_contributions_2q.pdf"))
+p
+dev.off()
+######################################

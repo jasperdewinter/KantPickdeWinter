@@ -115,7 +115,20 @@ if (saveFlag == 1) {
   xlsx::write.xlsx(X_con, file = fileName_vintage, sheetName="Fcst Results RMSE", col.names=TRUE, row.names=TRUE, append=FALSE)
 }
 
-################################### Contributions ##################################
+
+
+
+# ################################### Contribution Graphs ##################################
+#
+
+# Load file with outcomes
+rm(list=ls())
+ROOT <- rprojroot::find_rstudio_root_file()  # !!!! Adjust main path
+Sys.setenv(TZ ="UTC")
+load(paste0(ROOT,"/Results/fcst/Raw RS, RP. LASSO, EN/LASSO.RData"))
+library(tidyverse)
+library(data.table)
+
 # Matrix of constributions
 contributions <- matrix(NA, 1368, 253)
 for (x in 1:1368) {
@@ -123,12 +136,13 @@ for (x in 1:1368) {
 }
 
 # Store relevant indices to retrieve contributions for a specific forecast differential
-index <- vector(mode="list", 11) 
+# see FcstSave.xlsx
+index <- vector(mode="list", 11)                                                
 
 for (a in 1:length(index)) {
-  element_id <- seq(a+4,1368,12)
+  element_id <- seq(a + 4, 1368, 12)
   index[[a]] <- element_id
-  }
+}
 
 # Pre-allocate memory for forecast Great Moderation (GM), Financial crisis (FC) and Post Financial Crisis (PFC)
 GM     <- 1:64
@@ -137,7 +151,7 @@ PFC    <- 80:108
 period <- c(GM, FC, PFC)
 period_contributions <- matrix(NA, length(index), 252)
 
-# Indices categories
+# Indices categories (5 in total)
 prod_sales <- 1:63
 surveys    <- 64:171
 financial  <- 172:195
@@ -145,38 +159,35 @@ prices     <- 196:237
 other      <- 238:252
 
 # Average backcasts over 2M, Nowcasts, 1Q and 2Q forecasts over 3 months
+# start at row 4 (1992Q1) end at row 111 (2018Q4)
 gdp          <- FcstSave[(4:111),3]
-back_avg     <- rowMeans(FcstSave[(4:111),(5:6)][period,])
-now_avg      <- rowMeans(FcstSave[(4:111),(7:9)][period,])
-f1_avg       <- rowMeans(FcstSave[(4:111),(10:12)][period,])
-f2_avg       <- rowMeans(FcstSave[(4:111),(13:15)][period,])
-dates        <- seq(as.Date("1992-03-01"), as.Date("2018-12-01"), "quarters")
-FcstSave_avg <- cbind(gdp, back_avg, now_avg, f1_avg, f2_avg)
+back_avg     <- rowMeans(FcstSave[(4:111),(5:6)][period,])                      # Average Backcast M2 en M1
+now_avg      <- rowMeans(FcstSave[(4:111),(7:9)][period,])                      # Average Nowcast M3,M2 en M1
+f1_avg       <- rowMeans(FcstSave[(4:111),(10:12)][period,])                    # Average FQ1 M3,M2 en M1
+f2_avg       <- rowMeans(FcstSave[(4:111),(13:15)][period,])                    # Average FQ2 M3,M2 en M1
+dates        <- seq(as.Date("1992-03-01"), as.Date("2018-12-01"), "quarters")   # Matrix from 1992Q1 up until 2018Q4
+FcstSave_avg <- cbind(gdp, back_avg, now_avg, f1_avg, f2_avg)                   #
 FcstSave_avg <- data.frame(dates, as.data.frame(FcstSave_avg))
 
+fwrite(FcstSave, paste0(ROOT,"/Results/graphs/FcstSave.csv"))
+# see FcstSave.xlsx; 1368 entires in matrix without GDP column
 
-
-
-
-
-
-
-
-############# Graph Backcast contributions #########################
+# Graphs backcast, nowcast, 1 quarter and 2 quarter ahead forecasts ####
+## Backcast quarterly average ####
 
 # Backcast contributions per period
 period_contributions <- list(mode="list", 2)
-perc_contr <- matrix(NA, length(period), 252)
-for (b in 1:2) {
-    for (j in 4:111) {
+perc_contr <- matrix(NA, length(period), 252)                                   # NA x 108 (# periods) x 252 (# of variables)
+for (b in 1:2) {                                                                # WARNING: adjust here! Backcast M1 & Backcast M2 | b defines backcast[1:2], nowcast[3:5] or 1q[6:9]/2q [10:12] forecast
+    for (j in 4:111) {                                                          # Loop: 1992Q1 - 2018Q4    
     perc_contr[(j-3),] <- abs(contributions[index[[b]],][j,-1]) / sum( abs( contributions[index[[b]],][j,-1] ) )
   }
   perc_contr <- perc_contr[period,]
-  period_contributions[[b]] <- perc_contr
+  period_contributions[[b]] <- perc_contr                                       # WARNING: adjust here!
   perc_contr <- matrix(NA, length(period), 252)
 }
 
-back_contributions     <- Reduce("+", period_contributions) / length(period_contributions)
+back_contributions     <- Reduce("+", period_contributions) / length(period_contributions) # sum Backast constributions and divide by nuymber of periods (=length(period_contributions))
 categories             <- list(prod_sales, surveys, financial, prices, other)
 category_contributions <- rep(NA, length(period)*5)
 
@@ -195,7 +206,6 @@ df_dates     <- rep(dates[period], each = 5)
 df_y         <- rep(FcstSave[(4:111),3][period], each = 5)
 
 df_plot <- data.frame(df_back_avg, df_y,df_dates, category_rep, category_contributions ) # Add all relevant ...
-
 
 p <- ggplot(df_plot, aes(x = df_dates, y = category_contributions)) +
   # geom_bar(aes(x = df_dates, fill = category_rep), colour= "black", size = .00001, stat="identity") +
@@ -219,105 +229,191 @@ labs(fill = "Category", face = "bold")
 
 p
 #
-pdf("LASSO_contributions_back.pdf")
+pdf(paste0(ROOT,"/Results/graphs/LASSO_contributions_back.pdf"))
+p
+dev.off()
+######################################
+
+## Nowcast quarterly average ####
+
+# Nowcast contributions per period
+period_contributions <- list(mode="list", 3)
+perc_contr <- matrix(NA, length(period), 252)                                   # NA x 108 (# periods) x 252 (# of variables)
+for (b in 3:5) {                                                                # WARNING: adjust here! Backcast M1 & Backcast M2 | b defines backcast[1:2], nowcast[3:5] or 1q[6:9]/2q [10:12] forecast
+    for (j in 4:111) {                                                            # Loop: 1992Q1 - 2018Q4    
+    perc_contr[(j-3),] <- abs(contributions[index[[b]],][j,-1]) / sum( abs( contributions[index[[b]],][j,-1] ) )
+  }
+  perc_contr <- perc_contr[period,]
+  period_contributions[[b-2]] <- perc_contr                                     # WARNING: adjust here!
+  perc_contr <- matrix(NA, length(period), 252)
+}
+
+now_contributions      <- Reduce("+", period_contributions) / length(period_contributions) # sum Backast constributions and divide by nuymber of periods (=length(period_contributions))
+categories             <- list(prod_sales, surveys, financial, prices, other)
+category_contributions <- rep(NA, length(period)*5)
+
+for (t in 1:length(period)) {
+  for (cat_nr in 1:5) {
+    cat <- unlist(categories[[cat_nr]])
+    category_contributions[(5*(t-1) + cat_nr)] <- sum(now_contributions[t,cat])
+  }
+  category_contributions[((1+(t-1)*5):(t*5))] <- category_contributions[((1+(t-1)*5):(t*5))] * now_avg[t]
+}
+
+category     <- c("Production & Sales", "Surveys", "Financial", "Prices", "Other")
+category_rep <- rep(category, length(period))
+df_now_avg   <- rep(now_avg, each = 5)
+df_dates     <- rep(dates[period], each = 5)
+df_y         <- rep(FcstSave[(4:111),3][period], each = 5)
+
+df_plot <- data.frame(df_now_avg, df_y,df_dates, category_rep, category_contributions ) # Add all relevant ...
+
+p <- ggplot(df_plot, aes(x = df_dates, y = category_contributions)) +
+  # geom_bar(aes(x = df_dates, fill = category_rep), colour= "black", size = .00001, stat="identity") +
+  geom_bar(aes(x = df_dates, fill = category_rep), stat="identity", width=105) +
+  geom_line(aes(x= df_dates, df_now_avg), size = 0.6) + # + geom_line(aes(x=df_dates, df_y), linetype = "dashed")
+  scale_fill_manual(values=c("#9999CC", "brown", "#66CC99","orange","#CC6666")) +
+  scale_colour_manual(values=c("#9999CC", "brown", "#66CC99","orange","#CC6666"))
+
+p <- p + theme( # remove the vertical grid lines
+  panel.grid.major.x = element_blank() ,
+  # explicitly set the horizontal lines (or they will disappear too)
+  panel.grid.major.y = element_line( size=.1, color="grey" ),
+  panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=0.5), aspect.ratio=1) +
+  scale_x_date(limits = as.Date(c(dates[1],dates[length(period)-1])))
+
+p <- p + labs(title = "LASSO nowcast contribution", x = "Years", y = "GDP growth (%)") +
+  theme(plot.title = element_text(hjust = 0.5, size = 26,face="bold"), axis.text=element_text(size=16),
+        axis.title=element_text(size=20), legend.position = c(0.85,0.15),
+        legend.background = element_rect(color = "black", fill = "white", size = 0.5, linetype = "solid") ) +
+  labs(fill = "Category", face = "bold")
+
+p
+#
+pdf(paste0(ROOT,"/Results/graphs/LASSO_contributions_now.pdf"))
 p
 dev.off()
 ######################################
 
 
-# back_GM <- colMeans(period_contributions[(1:2),])
-# now_GM  <- colMeans(period_contributions[(3:5),])
-# f1_GM   <- colMeans(period_contributions[(6:8),])
-# f2_GM   <- colMeans(period_contributions[(9:11),])
-# 
-# back_FC <- colMeans(period_contributions[(1:2),])
-# now_FC  <- colMeans(period_contributions[(3:5),])
-# f1_FC   <- colMeans(period_contributions[(6:8),])
-# f2_FC   <- colMeans(period_contributions[(9:11),])
-# 
-# back_PFC <- colMeans(period_contributions[(1:2),])
-# now_PFC  <- colMeans(period_contributions[(3:5),])
-# f1_PFC   <- colMeans(period_contributions[(6:8),])
-# f2_PFC   <- colMeans(period_contributions[(9:11),])
-# 
-# cat_contribution <- c(sum(back_GM[prod_sales]),sum(back_GM[surveys]),
-#                       sum(back_GM[financial]),sum(back_GM[prices]),sum(back_GM[other]),
-#                       sum(back_FC[prod_sales]),sum(back_FC[surveys]),
-#                       sum(back_FC[financial]),sum(back_FC[prices]),sum(back_FC[other]),
-#                       sum(back_PFC[prod_sales]),sum(back_PFC[surveys]),
-#                       sum(back_PFC[financial]),sum(back_PFC[prices]),sum(back_PFC[other]))
-# 
-# category <- c("P&S", "S", "F", "P", "O")
-# period <- c(rep("GM",5), rep("FC", 5), rep("PFC", 5))
-# 
-# df <- data.frame(category,cat_contribution, period)
-# df$period <- factor(df$period, levels = c("GM", "FC", "PFC"))
-# 
-# p <- ggplot(df, aes(category,cat_contribution)) +geom_bar(stat="identity", position="dodge", aes(fill = period))
-# 
-# p <- p + labs(title = "LASSO contributions backcast", x = "Variable", y = "Contribution") +
-#   theme(plot.title = element_text(hjust = 0.5, size = 26,face="bold")) +
-#   theme(axis.text=element_text(size=16),
-#         axis.title=element_text(size=20))  #+
-#  # theme(aspect.ratio=1,legend.position = "none")
-# 
-# p <- p +
-#   theme( # remove the vertical grid lines
-#     panel.grid.major.x = element_blank() ,
-#     # explicitly set the horizontal lines (or they will disappear too)
-#     panel.grid.major.y = element_line( size=.1, color="grey" ),
-#     panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=0.5))
-# 
-# p
-# 
-# 
-# 
-# 
-# 
-# # ################################ Coefficients ##############################
-# scaleFUN <- function(x) sprintf("%.1f", x)
-# # data_coeff <- data.frame(cv = cbind(back_GM[-1], back_PFC[-1]), x = 1:252)
-# # data_coeff <- data.frame(cv = cbind(back_GM[-1], back_PFC[-1]))
-# variable <- c(rep("GM", 252), rep("PFC", 252))
-# con <- c(back_GM, back_PFC)
-# data_coeff <- data.frame(x = c(1:252 , 1:252), variable, con)
-# 
-# p <- ggplot(data_coeff, aes(x = x)) +geom_bar(stat="identity", position="dodge",
-#                                               aes(y = con, fill = factor(variable),colour = factor(variable), linetype = factor(variable))
-#                                               ) +
-#   scale_color_manual(values=c("#000000", "#B7B6B6")) +
-#   scale_fill_manual(values=c("#000000", "#B7B6B6"))
-# p
-# 
-# p <- p + labs(title = "LASSO contributions backcast", x = "Variable", y = "Contribution") +
-#   theme(plot.title = element_text(hjust = 0.5, size = 26,face="bold")) +
-#   theme(axis.text=element_text(size=16),
-#         axis.title=element_text(size=20)) + scale_y_continuous(labels=scaleFUN) +
-#    theme(aspect.ratio=1,legend.position = "none")  +
-#   scale_x_continuous(name = "Variable number")
-# 
-# p <- p +
-#   theme( # remove the vertical grid lines
-#     panel.grid.major.x = element_blank() ,
-#     # explicitly set the horizontal lines (or they will disappear too)
-#     panel.grid.major.y = element_line( size=.1, color="grey" ),
-#     panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=0.5))
-# 
-# p
-# 
-# # ggsave("LASSO_contributions_back.pdf", width = 5, height = 5)
-# 
-# # pdf("LASSO_contributions_back.pdf")
-# # # 2. Create a plot
-# # p
-# # dev.off()
-# #
-# 
-# 
-# ####################################
-# con_t <- contributions[index[[1]][4:111],]
-# LASSO_fcst <-
-#   plot(Y_t, type = "l")
-# lines(con_t[,1], lty="dashed")
+## 1 quarter ahead quarterly average ####
 
+# 1 quarter ahead contributions per period
+period_contributions <- list(mode="list", 3)
+perc_contr <- matrix(NA, length(period), 252)                                   # NA x 108 (# periods) x 252 (# of variables)
+for (b in 6:8) {                                                                # WARNING: adjust here! Backcast M1 & Backcast M2 | b defines backcast[1:2], nowcast[3:5] or 1q[6:9]/2q [10:12] forecast
+  for (j in 4:111) {                                                            # Loop: 1992Q1 - 2018Q4    
+    perc_contr[(j-3),] <- abs(contributions[index[[b]],][j,-1]) / sum( abs( contributions[index[[b]],][j,-1] ) )
+  }
+  perc_contr <- perc_contr[period,]
+  period_contributions[[b-5]] <- perc_contr                                     # WARNING: adjust here!
+  perc_contr <- matrix(NA, length(period), 252)
+}
 
+f1_contributions      <- Reduce("+", period_contributions) / length(period_contributions) # sum Backast constributions and divide by nuymber of periods (=length(period_contributions))
+categories             <- list(prod_sales, surveys, financial, prices, other)
+category_contributions <- rep(NA, length(period)*5)
+
+for (t in 1:length(period)) {
+  for (cat_nr in 1:5) {
+    cat <- unlist(categories[[cat_nr]])
+    category_contributions[(5*(t-1) + cat_nr)] <- sum(f1_contributions[t,cat])
+  }
+  category_contributions[((1+(t-1)*5):(t*5))] <- category_contributions[((1+(t-1)*5):(t*5))] * f1_avg[t]
+}
+
+category     <- c("Production & Sales", "Surveys", "Financial", "Prices", "Other")
+category_rep <- rep(category, length(period))
+df_f1_avg   <- rep(f1_avg, each = 5)
+df_dates     <- rep(dates[period], each = 5)
+df_y         <- rep(FcstSave[(4:111),3][period], each = 5)
+
+df_plot <- data.frame(df_f1_avg, df_y,df_dates, category_rep, category_contributions ) # Add all relevant ...
+
+p <- ggplot(df_plot, aes(x = df_dates, y = category_contributions)) +
+  # geom_bar(aes(x = df_dates, fill = category_rep), colour= "black", size = .00001, stat="identity") +
+  geom_bar(aes(x = df_dates, fill = category_rep), stat="identity", width=105) +
+  geom_line(aes(x= df_dates, df_f1_avg), size = 0.6) + # + geom_line(aes(x=df_dates, df_y), linetype = "dashed")
+  scale_fill_manual(values=c("#9999CC", "brown", "#66CC99","orange","#CC6666")) +
+  scale_colour_manual(values=c("#9999CC", "brown", "#66CC99","orange","#CC6666"))
+
+p <- p + theme( # remove the vertical grid lines
+  panel.grid.major.x = element_blank() ,
+  # explicitly set the horizontal lines (or they will disappear too)
+  panel.grid.major.y = element_line( size=.1, color="grey" ),
+  panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=0.5), aspect.ratio=1) +
+  scale_x_date(limits = as.Date(c(dates[1],dates[length(period)-1])))
+
+p <- p + labs(title = "LASSO 1Q ahead contribution", x = "Years", y = "GDP growth (%)") +
+  theme(plot.title = element_text(hjust = 0.5, size = 26,face="bold"), axis.text=element_text(size=16),
+        axis.title=element_text(size=20), legend.position = c(0.85,0.15),
+        legend.background = element_rect(color = "black", fill = "white", size = 0.5, linetype = "solid") ) +
+  labs(fill = "Category", face = "bold")
+
+p
+#
+pdf(paste0(ROOT,"/Results/graphs/LASSO_contributions_1q.pdf"))
+p
+dev.off()
+######################################
+
+## 2 quarter ahead quarterly average ####
+
+# 2 quarter ahead contributions per period
+period_contributions <- list(mode="list", 3)
+perc_contr <- matrix(NA, length(period), 252)                                   # NA x 108 (# periods) x 252 (# of variables)
+for (b in 9:11) {                                                                # WARNING: adjust here! Backcast M1 & Backcast M2 | b defines backcast[1:2], nowcast[3:5] or 1q[6:9]/2q [10:12] forecast
+  for (j in 4:111) {                                                            # Loop: 1992Q1 - 2018Q4    
+    perc_contr[(j-3),] <- abs(contributions[index[[b]],][j,-1]) / sum( abs( contributions[index[[b]],][j,-1] ) )
+  }
+  perc_contr <- perc_contr[period,]
+  period_contributions[[b-8]] <- perc_contr                                     # WARNING: adjust here!
+  perc_contr <- matrix(NA, length(period), 252)
+}
+
+f2_contributions      <- Reduce("+", period_contributions) / length(period_contributions) # sum Backast constributions and divide by nuymber of periods (=length(period_contributions))
+categories             <- list(prod_sales, surveys, financial, prices, other)
+category_contributions <- rep(NA, length(period)*5)
+
+for (t in 1:length(period)) {
+  for (cat_nr in 1:5) {
+    cat <- unlist(categories[[cat_nr]])
+    category_contributions[(5*(t-1) + cat_nr)] <- sum(f2_contributions[t,cat])
+  }
+  category_contributions[((1+(t-1)*5):(t*5))] <- category_contributions[((1+(t-1)*5):(t*5))] * f2_avg[t]
+}
+
+category     <- c("Production & Sales", "Surveys", "Financial", "Prices", "Other")
+category_rep <- rep(category, length(period))
+df_f2_avg   <- rep(f2_avg, each = 5)
+df_dates     <- rep(dates[period], each = 5)
+df_y         <- rep(FcstSave[(4:111),3][period], each = 5)
+
+df_plot <- data.frame(df_f2_avg, df_y,df_dates, category_rep, category_contributions ) # Add all relevant ...
+
+p <- ggplot(df_plot, aes(x = df_dates, y = category_contributions)) +
+  # geom_bar(aes(x = df_dates, fill = category_rep), colour= "black", size = .00001, stat="identity") +
+  geom_bar(aes(x = df_dates, fill = category_rep), stat="identity", width=105) +
+  geom_line(aes(x= df_dates, df_f2_avg), size = 0.6) + # + geom_line(aes(x=df_dates, df_y), linetype = "dashed")
+  scale_fill_manual(values=c("#9999CC", "brown", "#66CC99","orange","#CC6666")) +
+  scale_colour_manual(values=c("#9999CC", "brown", "#66CC99","orange","#CC6666"))
+
+p <- p + theme( # remove the vertical grid lines
+  panel.grid.major.x = element_blank() ,
+  # explicitly set the horizontal lines (or they will disappear too)
+  panel.grid.major.y = element_line( size=.1, color="grey" ),
+  panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=0.5), aspect.ratio=1) +
+  scale_x_date(limits = as.Date(c(dates[1],dates[length(period)-1])))
+
+p <- p + labs(title = "LASSO 2Q ahead contribution", x = "Years", y = "GDP growth (%)") +
+  theme(plot.title = element_text(hjust = 0.5, size = 26,face="bold"), axis.text=element_text(size=16),
+        axis.title=element_text(size=20), legend.position = c(0.85,0.15),
+        legend.background = element_rect(color = "black", fill = "white", size = 0.5, linetype = "solid") ) +
+  labs(fill = "Category", face = "bold")
+
+p
+#
+pdf(paste0(ROOT,"/Results/graphs/LASSO_contributions_2q.pdf"))
+p
+dev.off()
+######################################
