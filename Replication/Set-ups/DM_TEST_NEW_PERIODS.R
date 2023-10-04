@@ -33,13 +33,42 @@ setwd(paste0(ROOT,"/Results/dm/"))
 ## Define Periods ##############################################################
 TOT  <- 1:108
 
-GM   <- 1:64                     # Great Moderation
-FC   <- 65:79                    # Financial Crisis  
-PFC  <- 80:108                   # Post Financial Crisis  
+GM   <- 1:65                       # Great Moderation
+FC   <- 66:77                      # Financial Crisis
+PFC  <- 78:108                     # Post Financial Crisis
 
-CRIS <- c(2:7, 66:70, 80:85)     # Crisis
-EXP  <- c(12:36, 44:61, 86:101)  # Expansion
-MOD  <- TOT[-c(CRIS,EXP)]        # Moderate
+# OECD indicator
+# https://fred.stlouisfed.org/series/NDLREC
+# https://www.oecd.org/sdd/leading-indicators/oecdcompositeleadingindicatorsreferenceturningpointsandcomponentseries.htm
+
+# CONTRACTION VERSUS EXPANSION, OECD INDICATOR
+# CRIS = RECESSION, EXP= EXPANSIONARY PERIOD, MOD= MODERATE GROWTH
+CRIS <- c(1:8, 66:70, 78:86)       # Recession
+EXP  <- c(9:35, 54:65, 87:104)     # Expansionary Period
+MOD  <- TOT[-c(CRIS,EXP)]          # Moderate Growth
+
+# # CONTRACTION VERSUS EXPANSION
+# CRIS <- c(2,8,41,46,67:70,73,78:81,83:84,86,89)     # Crisis
+# EXP  <- TOT[-c(CRIS)]            # Expansion
+# MOD  <- c(107:108)               # Moderate
+
+# # 10 YR. MOVING MEAN GROWHT RATE
+# CRIS <- c(2,8,41,46,67:70,73,78:81,83:84,86,89)     # Crisis
+# EXP  <- c(1,7,9:12,14:16,18:19,21:25,27:32,34,36,49,54:55,58,60:61,63:64,72,74:77,85,87:88,90,92:95,97,99:106,108)  # Expansion
+# MOD  <- TOT[-c(CRIS,EXP)]        # Moderate
+
+# # 10 YR. MOVING MEDIAN GROWHT RATE
+# CRIS <- c(2,8,41,46,67:70,73,78:81,83:84,86,89)     # Crisis
+# EXP  <- c(1,3:6,11,13:17,20,26,33,35,37:40,42:45,47:48,50:54,56:57,59,62,64:65,71,74:75,82,85,91,94:96,98,107)  # Expansion
+# MOD  <- TOT[-c(CRIS,EXP)]        # Moderate
+
+# GM   <- 1:64                     # Great Moderation
+# FC   <- 65:79                    # Financial Crisis  
+# PFC  <- 80:108                   # Post Financial Crisis  
+# 
+# CRIS <- c(2:7, 66:70, 80:85)     # Crisis
+# EXP  <- c(12:36, 44:61, 86:101)  # Expansion
+# MOD  <- TOT[-c(CRIS,EXP)]        # Moderate
 
 ## DM-test against Prevailing Mean #############################################
 models   <- c("AR","DFM","MDF","LASSO","EN","RS","RP","RF")
@@ -165,7 +194,7 @@ df.DM  <- data.frame(rbind(temp[,1:8],
 df.DM <-cbind(matrix(".",1),df.DM)
 names(df.DM)[1] <- "PM"
 rownames(df.DM) <- c(horizon, paste0("GM_",horizon), paste0("FC_",horizon), paste0("PFC_",horizon), paste0("CRIS_",horizon), paste0("MOD_",horizon), paste0("EXP_",horizon))
-openxlsx::write.xlsx(df.DM, "DM_M_greater_PM.xlsx", colNames = TRUE, rowNames = TRUE, overwrite = TRUE)
+openxlsx::write.xlsx(df.DM, "DM_M_greater_PM_NEW_PERIODS.xlsx", colNames = TRUE, rowNames = TRUE, overwrite = TRUE)
 
 
 
@@ -303,7 +332,7 @@ df.DM  <- data.frame(rbind(temp[,  1:9],
                            temp[,55:63])) 
 df.DM[,3] = "."
 rownames(df.DM) <- c(horizon, paste0("GM_",horizon), paste0("FC_",horizon), paste0("PFC_",horizon), paste0("CRIS_",horizon), paste0("MOD_",horizon), paste0("EXP_",horizon))
-openxlsx::write.xlsx(df.DM, "DM_M_greater_DFM.xlsx", colNames = TRUE, rowNames = TRUE, overwrite = TRUE)
+openxlsx::write.xlsx(df.DM, "DM_M_greater_DFM_NEW_PERIODS.xlsx", colNames = TRUE, rowNames = TRUE, overwrite = TRUE)
 
 
 
@@ -439,4 +468,4 @@ df.DM  <- data.frame(rbind(temp[,  1:9],
                            temp[,55:63])) 
 df.DM[,9] = "."
 rownames(df.DM) <- c(horizon, paste0("GM_",horizon), paste0("FC_",horizon), paste0("PFC_",horizon), paste0("CRIS_",horizon), paste0("MOD_",horizon), paste0("EXP_",horizon))
-openxlsx::write.xlsx(df.DM, "DM_M_greater_RF.xlsx", colNames = TRUE, rowNames = TRUE, overwrite = TRUE)
+openxlsx::write.xlsx(df.DM, "DM_M_greater_RF_NEW_PERIODS.xlsx", colNames = TRUE, rowNames = TRUE, overwrite = TRUE)

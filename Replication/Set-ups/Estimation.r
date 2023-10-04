@@ -80,7 +80,7 @@ saveFlag   <- 1                                                                 
 HorizonSet <- c(-1,0,1,2)                                                       # Horizon for MIDAS models (in quarters)
 LagOrder   <- 2                                                                 # Contemporaneous lag is already included!
 # MIDAS with Almon lag specification
-# num_factors<- 1                                                                 # Number of factors in MIDAS, vary between [1,2,3,4,5,6]
+# num_factors<- 1                                                               # Number of factors in MIDAS, vary between [1,2,3,4,5,6]
 typeFlag   <- 0                                                                 # 0: unrestricted MIDAS, 1: MIDAS with exponential Almon lags
 num_param  <- 2                                                                 # number of parameters in restricted form (exponential Almon lags)
 

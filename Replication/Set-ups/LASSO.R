@@ -17,8 +17,8 @@ X_con <- vector(mode="list", 1368)                                              
 start_time <- Sys.time()
 
 for (i in 1:length(myFiles)) {                                                                         # Loop through data vintages
-
-  # Load relevant data for iteration
+ 
+   # Load relevant data for iteration
   data   <- readMat(myFiles[i])
   Y_q    <- Process_data(data)[[1]]
   Date   <- Process_data(data)[[2]]

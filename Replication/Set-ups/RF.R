@@ -269,7 +269,7 @@ p <- p + theme( # remove the vertical grid lines
   panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=0.5), aspect.ratio=1) +
   scale_x_date(limits = as.Date(c(dates[1],dates[length(period)-1])))
 
-p <- p + labs(title = "RF 1 backcast contribution", x = "Years", y = "GDP growth (%)") +
+p <- p + labs(title = "RF backcast contribution", x = "Years", y = "GDP growth (%)") +
   theme(plot.title = element_text(hjust = 0.5, size = 26,face="bold"), axis.text=element_text(size=16),
         axis.title=element_text(size=20),# legend.position = c(0.85,0.15),
         legend.position = "bottom", legend.background = element_rect(color = "black", fill = "white", size = 0.5, linetype = "solid") ) +

@@ -5,7 +5,6 @@
 #
 # 13.03.2023: introduced fixed seeds for Random Subsampling
 # 13.03.2023: created loop and write a worksheet for each k
-# 13.03.2023: 16:38 hours, start estimation
 #
 ###############################################################################################################
 #
@@ -227,7 +226,7 @@ for (b in 1:2) {
 }
 
 now_contributions <- Reduce("+", period_contributions) / length(period_contributions)
-categories <- list(prod_sales,surveys,financial,prices,other)
+categories <- list(prod_sales, surveys, financial,prices, other)
 category_contributions <- rep(NA, length(period)*5)
 
 
@@ -239,10 +238,10 @@ for (t in 1:length(period)) {
   category_contributions[((1+(t-1)*5):(t*5))] <- category_contributions[((1+(t-1)*5):(t*5))] * now_avg[t]
 }
 
-category <- c("Production & Sales", "Surveys", "Financial", "Prices", "Other")
+category     <- c("Production & Sales", "Surveys", "Financial", "Prices", "Other")
 category_rep <- rep(category, length(period))
-df_now_avg <- rep(now_avg, each = 5)
-df_dates    <- rep(dates[period], each = 5)
+df_now_avg   <- rep(now_avg, each = 5)
+df_dates     <- rep(dates[period], each = 5)
 
 
 df_plot <- data.frame(df_now_avg, df_dates, category_rep, category_contributions ) # Add all relevant ...
@@ -262,7 +261,7 @@ p <- p + theme( # remove the vertical grid lines
   panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=0.5), aspect.ratio=1) +
   scale_x_date(limits = as.Date(c(dates[1],dates[length(period)-1])))
 
-p <- p + labs(title = "RS 1 backcast contribution", x = "Years", y = "GDP growth (%)") +
+p <- p + labs(title = "RS backcast contribution", x = "Years", y = "GDP growth (%)") +
   theme(plot.title = element_text(hjust = 0.5, size = 26,face="bold"), axis.text=element_text(size=16),
         axis.title=element_text(size=20),# legend.position = c(0.85,0.15),
         legend.position = "bottom", legend.background = element_rect(color = "black", fill = "white", size = 0.5, linetype = "solid") ) +
