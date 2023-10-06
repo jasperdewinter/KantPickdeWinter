@@ -13,6 +13,8 @@
 .Rproj.user/
 *.Rproj
 
+# Archive directories
+/*Archive/
 
 # excel files, word-files, pdf-files
 *.csv
