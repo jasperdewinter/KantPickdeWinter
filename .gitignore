@@ -11,7 +11,7 @@
 
 # RStudio files
 .Rproj.user/
-AStA_KPW.Rproj
+*.Rproj
 
 # Archive directories
 Archive/
