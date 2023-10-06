@@ -17,12 +17,13 @@
 Archive/
 archive/
 
-# excel files, word-files, pdf-files
+# Exclude file types
 *.csv
 # *.xls
 # *.pdf
 *.doc
 *.gz
+*.mat
 
 # R data files
 # *.rda
