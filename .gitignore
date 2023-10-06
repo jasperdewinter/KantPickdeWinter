@@ -14,7 +14,8 @@
 *.Rproj
 
 # Archive directories
-/*Archive/
+Archive/
+archive/
 
 # excel files, word-files, pdf-files
 *.csv
