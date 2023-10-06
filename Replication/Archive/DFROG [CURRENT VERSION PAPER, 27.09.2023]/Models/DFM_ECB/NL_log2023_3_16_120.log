@@ -1,0 +1,37 @@
+i=1
+
+i =
+
+     1
+
+    if ~(strcmp(Model,'RUN_QVAR') | strcmp(Model,'RUN_BEQ'))
+        disp(['Period ' Date2str(Date(end,:))])
+    end
+Period 2019-12
+i=342
+
+i =
+
+   342
+
+    if ~(strcmp(Model,'RUN_QVAR') | strcmp(Model,'RUN_BEQ'))
+        disp(['Period ' Date2str(Date(end,:))])
+    end
+Period 2019-12
+if system_dependent('IsDebugMode')==1, dbquit; end
+tic
+%__________________________________________________________________________
+%              RECURSIVE EVALUATION OF FORECAST PERFORMANCE
+%              Written by Marta Banbura & Gerhard Ruenstler
+%                       (European Central Bank)
+%
+%      The program evaluates the forecast performance of the dynamic
+%      factor model by Doz et al. (2005) as implemented at the ECB
+%      The program runs recursive forecasts and calculates the RMSEs
+%__________________________________________________________________________
+clear
+clc
+data_now = clock;
+date_now = clock;
+date_now = strcat(num2str(date_now(1)),'_',num2str(date_now(2)),'_', num2str(date_now(3)),'_', num2str(date_now(4)), num2str(date_now(5)));
+diary(strcat('NL_', 'log', date_now,'.log'));

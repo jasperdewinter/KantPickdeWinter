@@ -1,0 +1,13 @@
+{
+    "databank.fromCSV": {
+        "inputs": [
+            {
+                "name": "fileName",
+                "kind": "required",
+                "type": [
+                    "file=*.csv"
+                ]
+            }
+        ]
+    }
+}

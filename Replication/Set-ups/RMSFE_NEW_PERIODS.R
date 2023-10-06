@@ -175,7 +175,8 @@ RMSFE[63,] <- sqrt(colMeans((RF[EXP,] - Y_ref)^2))/RMSFE[55,]
 # put in right format for tables in paper
 RMSFE     <- t(RMSFE)
 RMSFE     <- RMSFE[rev(rownames(RMSFE)),]
-RMSFE     <- round(RMSFE, digits = 2)
+# RMSFE     <- round(RMSFE, digits = 2)
+RMSFE     <- round(RMSFE, digits = 5)
 df.RMSFE  <- data.frame(rbind(RMSFE[,  1:9], 
                               RMSFE[,10:18],
                               RMSFE[,19:27],
@@ -210,7 +211,8 @@ df.RMSFEQ  <- data.frame(rbind(RMSFEQ[,1:9],
                                RMSFEQ[,46:54],
                                RMSFEQ[,55:63])) 
 
-df.RMSFEQ  <- round(df.RMSFEQ,2)
+# df.RMSFEQ  <- round(df.RMSFEQ, digits = 2)
+df.RMSFEQ  <- round(df.RMSFEQ, digits = 5)
 row.names(df.RMSFEQ) = c(horizonQ, paste0("GM_",horizonQ), paste0("FC_",horizonQ), paste0("PFC_",horizonQ), paste0("CRIS_",horizonQ), paste0("MOD_",horizonQ), paste0("EXP_",horizonQ))
 
 ## write to Excel ##############################################################

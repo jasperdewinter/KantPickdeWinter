@@ -1,0 +1,15 @@
+Period 2019-12
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('SKF')" style="font-weight:bold">SKF</a>
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('RUN_DFM_ECB', 'G:\EBO\ECMO\de Winter\Werk\Onderzoek\PROJECT 11.  KANT PICK DE WINTER\Replication\DFROG\Models\DFM_ECB\RUN_DFM_ECB.m', 96)" style="font-weight:bold">RUN_DFM_ECB</a> (<a href="matlab: opentoline('G:\EBO\ECMO\de Winter\Werk\Onderzoek\PROJECT 11.  KANT PICK DE WINTER\Replication\DFROG\Models\DFM_ECB\RUN_DFM_ECB.m',96,0)">line 96</a>)
+      R_KF  = SKF([Xf yf],Q.Model,Q);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('PseudoRealTime', 'G:\EBO\ECMO\de Winter\Werk\Onderzoek\PROJECT 11.  KANT PICK DE WINTER\Replication\DFROG\Functions\PseudoRealTime\PseudoRealTime.m', 55)" style="font-weight:bold">PseudoRealTime</a> (<a href="matlab: opentoline('G:\EBO\ECMO\de Winter\Werk\Onderzoek\PROJECT 11.  KANT PICK DE WINTER\Replication\DFROG\Functions\PseudoRealTime\PseudoRealTime.m',55,0)">line 55</a>)
+    eval(['[f Date_f P] = ' Model '(Xc,Yc,Date,h,P);']);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('RecFcst_DFM_ECB_NL', 'G:\EBO\ECMO\de Winter\Werk\Onderzoek\PROJECT 11.  KANT PICK DE WINTER\Replication\DFROG\RecFcst_DFM_ECB_NL.m', 129)" style="font-weight:bold">RecFcst_DFM_ECB_NL</a> (<a href="matlab: opentoline('G:\EBO\ECMO\de Winter\Werk\Onderzoek\PROJECT 11.  KANT PICK DE WINTER\Replication\DFROG\RecFcst_DFM_ECB_NL.m',129,0)">line 129</a>)
+[fcstR Yref fDate P] = PseudoRealTime(Model,P,X,Y_M,Date,T,fcstH,Q_a);
+} 
+if system_dependent('IsDebugMode')==1, dbquit; end
+RecFcst_DFM_ECB_NL

@@ -6,7 +6,7 @@ Process_data <- function(data){
   # INPUTS            data               4-dimensional list object including dates, indicator information, 
   #                                      pseudo-available GDP information and all available GDP information to date
   #
-  # OUTPUTS           Y_q                GDP realisations
+  # OUTPUTS           Y_q                GDP realizations
   #                   Date               Dates
   #                   data_X             Skip-sampled transformed data
   #
