@@ -1,7 +1,7 @@
 ################################ Calculate RMSFEs ##############################
 #                                                                              #
 #                     Dennis Kant, Andreas Pick and Jasper de Winter           #
-#                                   10/03/2023                                 #
+#                                   09/10/2023                                 #
 #                                                                              #
 ################################ Calculate RMSFEs ##############################
 
@@ -26,8 +26,6 @@ EN     <- read_excel("fcst results EN.xlsx",     sheet = "Fcst Results")[(4:111)
 RS     <- read_excel("fcst results RS.xlsx",     sheet = "Fcst Results")[(4:111),(6:16)]
 RP     <- read_excel("fcst results RP.xlsx",     sheet = "Fcst Results")[(4:111),(6:16)]
 RF     <- read_excel("fcst results RF.xlsx",     sheet = "Fcst Results")[(4:111),(6:16)]
-
-
 
 ## Define Periods ##############################################################
 TOT  <- 1:108
@@ -188,6 +186,6 @@ row.names(df.RMSFEQ) = c(horizonQ, paste0("GM_",horizonQ), paste0("FC_",horizonQ
 
 ## write to Excel ##############################################################
 setwd(paste0(ROOT,"/Results/rmsfe/"))
-openxlsx::write.xlsx(df.FIG2, "FIG2_NEW PERIODS.xlsx", colNames = TRUE, rowNames = TRUE, overwrite = TRUE)
-openxlsx::write.xlsx(df.RMSFE, "RMSFE_M_NEW_PERIODS.xlsx", colNames = TRUE, rowNames = TRUE, overwrite = TRUE)
-openxlsx::write.xlsx(df.RMSFEQ, "RMSFE_Q_NEW_PERIODS.xlsx", colNames = TRUE, rowNames = TRUE, overwrite = TRUE)
+openxlsx::write.xlsx(df.FIG2, "FIGURE_2xlsx", colNames = TRUE, rowNames = TRUE, overwrite = TRUE)
+openxlsx::write.xlsx(df.RMSFE, "RMSFE_M.xlsx", colNames = TRUE, rowNames = TRUE, overwrite = TRUE)
+openxlsx::write.xlsx(df.RMSFEQ, "RMSFE_Q.xlsx", colNames = TRUE, rowNames = TRUE, overwrite = TRUE)

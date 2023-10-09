@@ -1,7 +1,7 @@
 ############################ Nowcasting GDP using machine learning methods #####################################
 #
 #                               Dennis Kant, Andreas Pick and Jasper de Winter
-#                                           12/09/2023
+#                                           09/10/2023
 #
 ###############################################################################################################
 
@@ -11,14 +11,14 @@ Sys.setenv(TZ ="UTC")
 
 # Models         
 setwd(paste0(ROOT,"/Set-ups/"))                                                 # Adjust Estimation.r to change settings
-models    <- c("RW", "AR", "MIDAS-F", "LASSO", "EN", "RS", "RP", "RF")          # DFM available via Matlab code
+models    <- c("RW", "AR", "MIDAS-F", "LASSO", "EN", "RS", "RP", "RF")          
 modelName <- models[4]                                                          # Adjust to run a specific model
 source(paste0(modelName, ".r"))                                                                                          
 
 # Calculate RMSFEs
-setwd(paste0(ROOT,"/Set-ups/"))                                                 # Adjust Estimation.r to change settings
+setwd(paste0(ROOT,"/Set-ups/"))                                                 
 source("RMSFE.r")
 
 # Diebold-Mariano tests
-setwd(paste0(ROOT,"/Set-ups/"))                                                 # Adjust Estimation.r to change settings
+setwd(paste0(ROOT,"/Set-ups/"))                                                 
 source("DM_TEST.r")
