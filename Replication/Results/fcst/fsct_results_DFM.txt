@@ -1,8 +1,0 @@
-Results produced in ..Archive\DFROG\main.m.
-After you copy-paste these setups to ..\fcst you can run the model.
-Exaclty the same results produced in DFROG ..\Replication\DFROG CONTRIBUTION\main.m but 
-something went wrong with the size of the contribution matrix to write to file. 
-
-So, I now re-run the whole thing using the R-Setups in ..\Dorinth\Production Code\Main_KPW.R. The projections are somewhat different (but might averag out), 
-probably because you treat the variables a little bit differently...
-
