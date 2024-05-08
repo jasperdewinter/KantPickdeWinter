@@ -1,6 +1,6 @@
 # Nowcasting GDP using machine learning methods
 
-This repository provides code to reproduce results in the paper "Nowcasting GDP using machine learning methods" by Dennis Kan, Andreas Pick and Jasper de Winter (2023).
+This repository provides code to reproduce results in the paper "Nowcasting GDP using machine learning methods" by Dennis Kant, Andreas Pick and Jasper de Winter (2023).
 
 The folder structure is as follows:
 
