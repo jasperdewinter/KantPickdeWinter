@@ -13,7 +13,7 @@ time zone: Europe/Berlin
 tzcode source: internal
 
 attached base packages:
-character(0)
+[1] stats     graphics  grDevices utils     datasets  methods   base
 
 other attached packages:
  [1] midasr_0.8           MLmetrics_1.1.3      astsa_2.1            R.matlab_3.7.0       naturalsort_0.1.3    data.table_1.14.10   xlsx_0.6.5           glmnet_4.1-8        
