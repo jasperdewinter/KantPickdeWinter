@@ -12,3 +12,4 @@ The folder structure is as follows:
 * ADJUST!! Run line `MAIN.R` line 18--20 to reproduce monthly and quarterly RMSFE's in Table 2,3 and 4 and Figure 2. The resulting RMSFE's are in the `Results\rmsfe` folder. Data for Figure 2 written to Excel-file `FIGURE_2xlsx`;
 * ADJUST!! Run line `MAIN.R` line 22--24 to reproduce monthly and quarterly Diebold Mariano tests n Table 2,3 and 4. The resulting DM-tests against the Dynamic Factor model are in the `Results\dm` folder in the Excel-file `DM_TEST.xlsx`;
 * ADJUST!! The results in Table 5 and 6 can be reproduced with the Matlab-setup `Table 5&6.m`.
+* File SessionInfo.txt contains information on versioning of the used R-software and R-packages.
