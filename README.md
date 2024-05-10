@@ -1,9 +1,10 @@
 # Nowcasting GDP using machine learning methods
 
-This repository provides code to reproduce results in the paper "Nowcasting GDP using machine learning methods" by Dennis Kant, Andreas Pick and Jasper de Winter. The code is provided "as is". The authors make no assertions as to its performance or effects if run, provides no warranties of any kind, and disclaims any implied warranties, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose or noninfringement.
+This repository provides code to reproduce results in the paper "Nowcasting GDP using machine learning methods" by Dennis Kant, Andreas Pick and Jasper de Winter. The code is provided "as is". The authors make no assertions as to its performance or effects if run, provides no warranties of any kind, and disclaims any implied warranties, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose or noninfringement. 
+
+The scripts are most easily ran in Rstudio following these steps: Download or clone the repository and double-click AstA.proj to open the project in RStudio. Nxt, open Main and run the models and/or calculate DM-tests and report RMSFEs.
 
 The folder structure is as follows:
-
 * The R and Matlab code to reproduce all tables and figures are in the folder `Results` 
 * The R-code to run all models and functions to create all outcomes and figures are all in the `Set-ups` folder. Support-code in the sub-folder `Set-ups\Support Code`. 
 * The data are in the folder `data`. For confidentiality reasons some series had to be removed from the data-file (notably all data-series in Table A.2 that only have codes and not links). The forecasts, RMSFEs and contributions will therefore deviate from the outcomes in the paper;
