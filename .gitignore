@@ -23,7 +23,7 @@ archive/
 # *.pdf
 *.doc
 *.gz
-*.mat
+# *.mat
 
 # R data files
 # *.rda
