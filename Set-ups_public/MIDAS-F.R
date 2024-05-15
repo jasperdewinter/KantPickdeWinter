@@ -10,8 +10,6 @@ source("ESTIMATION.R")
 
 length_myFiles <- 4                                                             # WARNING: 4 factor modelspecs included. All 126 specs can be supplied upon request.
 Fcsts <- vector(mode = "list", 126)                                             # Store forecasts for all 126 factor configurations in list
-specs <- MIDAS_config_magic_numbers <- readxl::read_excel(paste0(ROOT,"/Results/other/MIDAS config & magic numbers.xlsx"), 
-                                         sheet = "export")                      # Import specs, including number of columns that contain factors
 
 start_time <- Sys.time()
 for (i in 1:length_myFiles) {                                                  

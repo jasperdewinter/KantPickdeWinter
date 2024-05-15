@@ -8,6 +8,9 @@
 ######################### Preliminaries ########################################
 setwd(paste0(ROOT,"/Set-ups_public/Support code"))
 
+oldw <- getOption("warn")
+options(warn = -1)
+
 # set Java memory
 options(java.parameters = "-Xmx28g")
 library(rJava)
@@ -135,3 +138,5 @@ colnames(FcstSave) <- c('Year', 'Quarter', 'Data', 'Backcast(3)', 'Backcast(2)',
 Y_ref              <- readMat(myFiles[length(myFiles)])$Yc.final
 Y_ref              <- Y_ref[!is.nan(Y_ref)]
 FcstSave[1:111,3]  <- Y_ref[22:132]
+
+options(warn = oldw)

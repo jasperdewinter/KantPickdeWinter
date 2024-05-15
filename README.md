@@ -18,7 +18,7 @@ calculate DM-tests and report RMSFEs.
 * Run line 12--25 of the R-file `MAIN.R` to reproduce the outcomes in Table 2,
   3 and 4; 
 * Run line 9--17  of the R-file `MAIN.R` to run one of the models in our
-  paper (adjust index in line 16), i.e. AR(1) model, `[AR]`, Random Walk
+  paper (adjust index in line 16), i.e. AR(1) model, `AR`, Random Walk
   `RW`, Factor-augmented Mixed Data Sampling regression `MIDAS-F`, Least
   Absolute Shrinkage and Selection Operator`LASSO`, Elastic Net `EN`, Random
   Subspace regression `RS`, Random Projection `RP`, Random Forest`RF`. 
