@@ -8,11 +8,10 @@
 ######################### Estimation ###########################################
 source("ESTIMATION.R")
 
-length_myFiles <- 4                                                             # WARNING: 4 factor modelspecs included. All 126 specs can be supplied upon request.
 Fcsts <- vector(mode = "list", 126)                                             # Store forecasts for all 126 factor configurations in list
 
 start_time <- Sys.time()
-for (i in 1:length_myFiles) {                                                  
+for (i in 1:length(myFiles)) {                                                  
 
   data             <- readMat(myFiles[i])
   
@@ -122,162 +121,12 @@ for (i in 1:length_myFiles) {
     }
     # summary(midas_fit)
     
-    ######################### Restricted MIDAS ##########################
-    # if (typeFlag == 0) {
-    #   start_values           <- matrix(1, (LagOrder + 1), col_factors)
-    #   colnames(start_values) <- factor_names
-    #   midas_fit              <- midas_r(formula,                              # restricted MIDAS (was in original setup oF Dennis, but Overleaf says we are estimating unrestriicted MIDAS)
-    #                                     data_midas,
-    #                                     start_values)                         # Starting values need to be of order 1 + LagOrder (as contemporaneous lag is automatically included)
-    # }
-    # summary(midas_fit)   
-    
-    # ######################### MIDAS Exponential Almon lag  ##########################
-    # if (typeFlag == 1) {
-    #   formula     <- formula_fun(LagOrder, FreqRatio, nr_factors, 1)[[1]]
-    # 
-    #   if (nr_factors == 1) {
-    #     a         <- F_m1
-    #     midas_fit <- midas_r(formula,
-    #                          start = list(a = rep(0.5, num_param)))
-    # 
-    #   } else if (nr_factors == 2) {
-    #     a         <- F_m1
-    #     b         <- F_m2
-    #     midas_fit <- midas_r(y ~ fmls(a,
-    #                                   LagOrder,
-    #                                   FreqRatio,
-    #                                   nealmon) +
-    #                            fmls(b,
-    #                                 LagOrder,
-    #                                 FreqRatio,
-    #                                 nealmon),
-    #                          start = list(a = rep(0.5, num_param),
-    #                                       b = rep(0.5, num_param)))
-    #   } else if (nr_factors == 3) {
-    #     a         <- F_m1
-    #     b         <- F_m2
-    #     c         <- F_m3
-    #     midas_fit <- midas_r(y ~ fmls(a,
-    #                                   LagOrder,
-    #                                   FreqRatio,
-    #                                   nealmon) +
-    #                            fmls(b,
-    #                                 LagOrder,
-    #                                 FreqRatio,
-    #                                 nealmon) +
-    #                            fmls(c,
-    #                                 LagOrder,
-    #                                 FreqRatio,
-    #                                 nealmon),
-    #                          start = list(a = rep(0.5, num_param),
-    #                                       b = rep(0.5, num_param),
-    #                                       c = rep(0.5, num_param)))
-    #   } else if (nr_factors == 4) {
-    #     a         <- F_m1
-    #     b         <- F_m2
-    #     c         <- F_m3
-    #     d         <- F_m4
-    #     midas_fit <- midas_r(y ~ fmls(a,
-    #                                   LagOrder,
-    #                                   FreqRatio,
-    #                                   nealmon) +
-    #                            fmls(b,
-    #                                 LagOrder,
-    #                                 FreqRatio,
-    #                                 nealmon) +
-    #                            fmls(c,
-    #                                 LagOrder,
-    #                                 FreqRatio,
-    #                                 nealmon) +
-    #                            fmls(d,
-    #                                 LagOrder,
-    #                                 FreqRatio,
-    #                                 nealmon),
-    #                          start = list(a = rep(0.5, num_param),
-    #                                       b = rep(0.5, num_param),
-    #                                       c = rep(0.5, num_param),
-    #                                       d = rep(0.5, num_param)))
-    #   } else if (nr_factors == 5) {
-    #     e         <- F_m5
-    #     a         <- F_m1
-    #     b         <- F_m2
-    #     c         <- F_m3
-    #     d         <- F_m4
-    #     midas_fit <- midas_r(y ~ fmls(a,
-    #                                   LagOrder,
-    #                                   FreqRatio,
-    #                                   nealmon) +
-    #                            fmls(b,
-    #                                 LagOrder,
-    #                                 FreqRatio,
-    #                                 nealmon) +
-    #                            fmls(c,
-    #                                 LagOrder,
-    #                                 FreqRatio,
-    #                                 nealmon) +
-    #                            fmls(d,
-    #                                 LagOrder,
-    #                                 FreqRatio,
-    #                                 nealmon) +
-    #                            fmls(e,
-    #                                 LagOrder,
-    #                                 FreqRatio,
-    #                                 nealmon),
-    #                          start = list(a = rep(0.5, num_param),
-    #                                       b = rep(0.5, num_param),
-    #                                       c = rep(0.5, num_param),
-    #                                       d = rep(0.5, num_param),
-    #                                       e = rep(0.5, num_param)))
-    #   } else {
-    #     a         <- F_m1
-    #     b         <- F_m2
-    #     c         <- F_m3
-    #     d         <- F_m4
-    #     e         <- F_m5
-    #     f         <- F_m6
-    #     midas_fit <- midas_r(y ~ fmls(a,
-    #                                   LagOrder,
-    #                                   FreqRatio,
-    #                                   nealmon) +
-    #                            fmls(b,
-    #                                 LagOrder,
-    #                                 FreqRatio,
-    #                                 nealmon) +
-    #                            fmls(c,
-    #                                 LagOrder,
-    #                                 FreqRatio,
-    #                                 nealmon) +
-    #                            fmls(d,
-    #                                 LagOrder,
-    #                                 FreqRatio,
-    #                                 nealmon) +
-    #                            fmls(e,
-    #                                 LagOrder,
-    #                                 FreqRatio,
-    #                                 nealmon) +
-    #                            fmls(f,
-    #                                 LagOrder,
-    #                                 FreqRatio,
-    #                                 nealmon),
-    #                          start = list(a = rep(0.5, num_param),
-    #                                       b = rep(0.5, num_param),
-    #                                       c = rep(0.5, num_param),
-    #                                       d = rep(0.5, num_param),
-    #                                       e = rep(0.5, num_param),
-    #                                       f = rep(0.5, num_param)))
-    #   }
-    # 
-    # }
-    
-    
-    
     ##################### MIDAS Forecasting ############################
     
     data_fcst <- c(lapply(1:ncol(fcst_sample), function(i) fcst_sample[,i]))
     
     # re-assign letters to variables for use in MIDAS-F
-    lettersL        <- c(LETTERS, sapply(LETTERS, function(x) paste0(x, LETTERS))) # 702 Uppercase letters
+    lettersL        <- c(LETTERS, sapply(LETTERS, function(x) paste0(x, LETTERS))) 
     names(data_fcst) <- lettersL[1:size(data_fcst)[2]]
     
     Y_q_fcst    <- forecast(midas_fit, data_fcst, method = "static")            # Forecast low-frequency variable

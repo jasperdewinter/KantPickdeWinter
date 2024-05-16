@@ -11,13 +11,6 @@ setwd(paste0(ROOT,"/Set-ups_public/Support code"))
 oldw <- getOption("warn")
 options(warn = -1)
 
-# set Java memory
-options(java.parameters = "-Xmx28g")
-library(rJava)
-.jinit(classpath="myClasses.jar", parameters="-Xmx28g")
-num_gigs_ram_available = .jcall(.jnew("java/lang/Runtime"), "J", "maxMemory") / 1e9 
-paste("You have ", round(num_gigs_ram_available, 2), "GB memory available.", sep = "")
-
 # Install required packages
 list.of.packages <- c('midasr',                                                 # MIDAS 
                       'MLmetrics',                                              # RMSE 
@@ -36,7 +29,8 @@ list.of.packages <- c('midasr',                                                 
                       'pracma',                                                 # Ceiling function
                       'readxl',                                                 # Read Excel-files
                       'forecast',                                               # Forecasts etc.
-                      'openxlsx'                                                # Alternative Excel-file utility
+                      'openxlsx',                                               # Alternative Excel-file utility
+                      'rJava'                                                   # Load Java package
 )
 
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
@@ -61,7 +55,11 @@ library(pracma)
 library(readxl)
 library(forecast)
 library(openxlsx)
-
+library(rJava)
+options(java.parameters = "-Xmx28g")
+.jinit(classpath="myClasses.jar", parameters="-Xmx28g")
+num_gigs_ram_available = .jcall(.jnew("java/lang/Runtime"), "J", "maxMemory") / 1e9 
+paste("You have ", round(num_gigs_ram_available, 2), "GB memory available.", sep = "")
 
 # Load functions
 source('column_id_nr.r')
@@ -117,7 +115,7 @@ k_set      <- 2                                                                 
 fcst_av_nr <- 1000                                                              # Number of sumsamples
 
 # RF specification
-# omega      <- 0.6:0.9                                                           # WARNING: omgea setting in paper
+# omega      <- 0.6:0.9                                                         # WARNING: omega settings in paper
 omega      <- 0.9                                                               # WARNING: k_set for non-public data/demonstration purposes
 
 # Pre-allocate storage
