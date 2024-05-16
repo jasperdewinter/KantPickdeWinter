@@ -1,7 +1,7 @@
 ################################### MIDAS-F ####################################
 #
 #     Dennis Kant, Andreas Pick and Jasper de Winter
-#     May 13, 2024
+#     May 16, 2024
 #
 #     WARNING: The outcome is based on raw data to estimate the MIDAS-F based on 
 #     a dynamic factor model with 1 static factor, 1 dynamic factor and 1 lag

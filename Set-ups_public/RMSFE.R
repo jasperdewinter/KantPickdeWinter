@@ -1,7 +1,7 @@
 ################################ Calculate RMSFEs ##############################
 #
 #     Dennis Kant, Andreas Pick and Jasper de Winter
-#     May 10, 2024
+#     May 16, 2024
 #
 #     Reproduce RMSFEs in paper
 #
