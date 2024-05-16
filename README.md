@@ -26,11 +26,11 @@ calculate DM-tests and report RMSFEs.
   directory `Results_public\fcst`. Figures are written to
   `Results_public\graphs`. Auxilliary files written to
   `Results_public\other`;
+* Run the Matlab file `TABLE_5_6.m` to reproduces Table 5 and 6 of our paper;
 * For confidentiality reasons some series had to be removed from the
   data-file (notably all data-series in Table A.2 that only have codes and no
   links. The forecasts, RMSFEs and contributions will therefore deviate from
-  the outcomes in the paper.
-* Run the Matlab file `TABLE_5_6.m` to reproduces Table 5 and 6 of our paper.
+  the outcomes in the paper;
 * The text-file `SessionInfo.txt`contains information on the R-(packages) and
   Matlab versions used to estimate the models.
 
