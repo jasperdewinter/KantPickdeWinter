@@ -82,18 +82,17 @@ if (modelName == "MIDAS-F") {
   setwd(paste0(ROOT,"/Data_public/Regular"))                                                                     
   }
 
-# Load data 
-myFiles    <- list.files(pattern="NL .*mat")                                    # Sort in natural order
-myFiles    <- naturalsort(myFiles) 
-
 # Number of variables
-NumVars     = 56
+NumVars     = 56                                                                
 
 # Start, End and Periods
 EvalStart   = 4                                                                 # 1992Q1
 EvalEnd     = 111                                                               # 2018Q4  
 
 # MIDAS-F.R specification
+myFiles    <- list.files(pattern="NL .*mat")                                    # Sort in natural order
+myFiles    <- naturalsort(myFiles) 
+
 LowFreq    <- 4                                                                 # Quarterly data (4 times a year)
 HighFreq   <- 12                                                                # Monthly data (12 times a year)
 FreqRatio  <- HighFreq/LowFreq
