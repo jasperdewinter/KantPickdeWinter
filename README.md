@@ -4,7 +4,7 @@ This repository provides code to reproduce results in the paper "Nowcasting
 GDP using machine learning methods" by Dennis Kant, Andreas Pick (EUR) and
 Jasper de Winter (DNB). The scripts are most easily ran in Rstudio following
 these steps: Download or clone the repository and double-click AstA.proj to
-open the project in RStudio. Nxt, open Main and run the models and/or
+open the project in RStudio. Next, open Main and run the models and/or
 calculate DM-tests and report RMSFEs.
 
 * The outcome of all Figures and Tables are collected in the directory
@@ -24,7 +24,7 @@ calculate DM-tests and report RMSFEs.
   Subspace regression `RS`, Random Projection `RP`, Random Forest`RF`. 
 * the backcasts, nowcasts and forecasts of the models are written to the
   directory `Results_public\fcst`. Figures are written to
-  `Results_public\graphs`. Auxilliary files written to
+  `Results_public\graphs`. Auxiliary files written to
   `Results_public\other`;
 * Run the Matlab file `TABLE_5_6.m` to reproduces Table 5 and 6 of our paper;
 * For confidentiality reasons some series had to be removed from the
