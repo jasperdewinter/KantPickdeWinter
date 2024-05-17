@@ -1,0 +1,30 @@
+# History files
+.Rhistory
+.Rapp.history
+
+# Session Data files
+.RData
+.Rprofile
+
+# User-specific files
+.Ruserdata
+
+# RStudio files
+.Rproj.user/
+*.Rproj
+
+# Archive directories
+Archive/
+archive/
+
+# Exclude file types
+*.csv
+# *.xls
+# *.pdf
+*.doc
+*.gz
+# *.mat
+
+# R data files
+# *.rda
+# *.RData
