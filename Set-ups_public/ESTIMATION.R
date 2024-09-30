@@ -75,12 +75,14 @@ source('RS_formula_fun.r')
 source('split_sample.r')
 source('str2vec_quarter_MIDASF.r')                                              # Transforms file names into date vectors
 source('str2vec_quarter.r')
+source('Process_data_MIDASF.r')
 
-if (modelName == "MIDAS-F") {
-  setwd(paste0(ROOT,"/Data_public/MIDAS-F"))
-  } else {
-  setwd(paste0(ROOT,"/Data_public/Regular"))                                                                     
-  }
+setwd(paste0(ROOT,"/Data_public/Regular"))     
+# if (modelName == "MIDAS-F") {
+#   setwd(paste0(ROOT,"/Data_public/MIDAS-F"))
+#   } else {
+#   setwd(paste0(ROOT,"/Data_public/Regular"))                                                                     
+#   }
 
 # Number of variables
 NumVars     = 56                                                                

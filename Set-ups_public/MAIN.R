@@ -1,7 +1,7 @@
 ################ Nowcasting GDP using machine learning methods #################
 #
 #     Dennis Kant, Andreas Pick and Jasper de Winter
-#     May 16, 2024
+#     September 31, 2024
 #
 ################################################################################
 #

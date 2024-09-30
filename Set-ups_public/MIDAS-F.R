@@ -1,7 +1,7 @@
 ################################################### MIDAS-F ###################################################
 #
 #                                   Dennis Kant, Andreas Pick and Jasper de Winter
-#                                                 09/25/2024
+#                                                 09/31/2024
 #
 ###############################################################################################################
 #
@@ -132,12 +132,12 @@ as.vector(round(FcstSave_RMSE,2))[-1]
 ##################### Save results ###########################################################################
 if (saveFlag == 1) {
 
-  setwd(paste0(ROOT,"/Results/"))
+  setwd(paste0(ROOT,"/Results_public/"))
   save.image(paste0(modelName,".RData")) 
   
-  fileName_results <- paste0("fcst results ", modelName, ".xlsx")
-  fileName_RMSE    <- paste0("fcst RMSE ", modelName, ".xlsx")
-  fileName_vintage <- paste0("fcst vintage ", modelName, ".xlsx")
+  fileName_results <- paste0("fcst/fcst results ", modelName, ".xlsx")
+  fileName_RMSE    <- paste0("rmsfe/fcst RMSE ", modelName, ".xlsx")
+  fileName_vintage <- paste0("other/fcst vintage ", modelName, ".xlsx")
 
   xlsx::write.xlsx(FcstSave, file=fileName_results, sheetName="Fcst Results", col.names=TRUE, row.names=TRUE, append=FALSE)
   xlsx::write.xlsx(FcstSave_RMSE, file =fileName_RMSE, sheetName="Fcst Results RMSE", col.names=TRUE, row.names=TRUE, append=FALSE)
@@ -157,11 +157,11 @@ for (nr_factors_loop in 1:nr_factors) {
   
   if (saveFlag == 1) {
   
-  setwd(paste0(ROOT,"/Results/"))
+  setwd(paste0(ROOT,"/Results_public/"))
   save.image(paste0(modelName,".RData")) 
   
-  fileName_results <- paste0("fcst results ", modelName, " ", nr_factors_loop, ".xlsx")
-  fileName_RMSE    <- paste0("fcst RMSE ", modelName, " ", nr_factors_loop, ".xlsx")
+  fileName_results <- paste0("fcst/fcst results ", modelName, " ", nr_factors_loop, ".xlsx")
+  fileName_RMSE    <- paste0("rmsfe/fcst RMSE ", modelName, " ", nr_factors_loop, ".xlsx")
 
   xlsx::write.xlsx(FcstSave_list[[nr_factors_loop]], file=fileName_results, sheetName="Fcst Results", col.names=TRUE, row.names=TRUE, append=FALSE)
   xlsx::write.xlsx(FcstSave_RMSE, file =fileName_RMSE, sheetName="Fcst Results RMSE", col.names=TRUE, row.names=TRUE, append=FALSE)
