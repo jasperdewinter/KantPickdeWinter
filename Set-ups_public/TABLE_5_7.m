@@ -13,7 +13,8 @@
 % housekeeping
 
 % adjust directory
-cd 'G:/EBO/ECMO/de Winter/Werk/Onderzoek/PROJECT 11  KANT PICK DE WINTER/Replication/Results/fcst/';
+cd 'G:/EBO/ECMO/de Winter/Werk/Onderzoek/AstA_KPW_ConfData/Results/fcst/';
+% cd 'G:/EBO/ECMO/de Winter/Werk/Onderzoek/PROJECT 11  KANT PICK DE WINTER/Replication/Results/fcst/';
 
 % load all the forecasts
 dfm = xlsread('fcst results DFM.xlsx','Fcst Results');
@@ -26,7 +27,8 @@ rf = xlsread('fcst results RF.xlsx','Fcst Results');
 rs = xlsread('fcst results RS.xlsx','Fcst Results');
 rp = xlsread('fcst results RP.xlsx','Fcst Results');
 
-cd 'G:/EBO/ECMO/de Winter/Werk/Onderzoek/PROJECT 11  KANT PICK DE WINTER/Replication/Set-ups_public';
+cd 'G:/EBO/ECMO/de Winter/Werk/Onderzoek/AstA_KPW_ConfData/Set-ups';
+% cd 'G:/EBO/ECMO/de Winter/Werk/Onderzoek/PROJECT 11  KANT PICK DE WINTER/Replication/Set-ups_public';
 
 % === calculate forecast error, rmsfe, bias^2 and variance ===================
 y = dfm(4:end-6,3); % realisation
@@ -81,7 +83,7 @@ ratio_absbias = absbias./(absbias(:,1)*ones(1,9));
 % min absbias
 min_absbias = min(ratio_absbias,[],2);
 
-% disp("Absolute bias")
+% disp("Absolute forecast bias over the period 1992Q1-2018Q4")
 % disp([absbias(:,1) ratio_absbias(:,2:end)])
 % disp(ratio_absbias == min_absbias)
 
@@ -104,7 +106,7 @@ ratio_std = stdev./(stdev(:,1)*ones(1,9));
 % min variance
 min_std = min(ratio_std,[],2);
 
-% disp("Standard devation")
+% disp("Forecast standard devation over the period 1992Q1-2018Q4")
 % disp([stdev(:,1) ratio_std(:,2:end)])
 % disp(ratio_std == min_std)
 
