@@ -18,4 +18,5 @@ Adjustments:
 * Adjusted MIDAS-F.R such that it writes to Results_public instead of public, and writes to the right directories (fcsts, rmsfe)
 * Adjusted output directories in TABLE_5_7.m
 
-
+Todo:
+* Update Matlab setup for table 7 such that it produces table 7 in the paper (but then for the public data only)
