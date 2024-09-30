@@ -20,3 +20,7 @@ Adjustments:
 
 Todo:
 * Update Matlab setup for table 7 such that it produces table 7 in the paper (but then for the public data only)
+
+
+Obviously there is something wrong with the DM tests since they do not conform to the results of Andreas. One thing that could have happened is that you do the one-sided test against the best model, not the DFM. Than it could explain it. In my view, thatn the DFM should have a significance mark (which it now hasn't). Adjust in AstA_KPW_ConfData and then correct here.
+
