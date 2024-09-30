@@ -30,7 +30,7 @@ calculate DM-tests and report RMSFEs.
 * For confidentiality reasons some series had to be removed from the
   data-file (notably all data-series in Table A.2 that only have codes and no
   links. The forecasts, RMSFEs and contributions will therefore deviate from
-  the outcomes in the paper;
+  the outcomes in the paper);
 * The text-file `SessionInfo.txt`contains information on the R-(packages) and
   Matlab versions used to estimate the models.
 
