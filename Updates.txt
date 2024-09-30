@@ -19,4 +19,5 @@ Adjustments:
 * Adjusted output directories in TABLE_5_7.m
 
 Todo:
-* Update Matlab setup for table 7 such that it produces table 7 in the paper (but then for the public data only)
+* Update Matlab setup for table 7 such that it produces table 7 in the paper (but then for the public data only); Andreas e-mailed me the setup on September 30th. Adjust in ConfData.
+* Also still need to adjust the DM test in PROJECT 11. KANT PICK DE WINTER. Just copy-paste DM test therein.
