@@ -1,7 +1,7 @@
 ################################ Diebold Mariano test##########################
 #
 #     Dennis Kant, Andreas Pick and Jasper de Winter
-#     May 16, 2024
+#     October 1, 2024
 #
 #     Reproduce DM-test in paper
 #
@@ -165,7 +165,13 @@ df.DM  <- data.frame(rbind(temp[,1:8],
                            temp[,49:56])) 
 df.DM <-cbind(matrix(".",1),df.DM)
 names(df.DM)[1] <- "PM"
-rownames(df.DM) <- c(horizon, paste0("GM_",horizon), paste0("FC_",horizon), paste0("PFC_",horizon), paste0("CRIS_",horizon), paste0("MOD_",horizon), paste0("EXP_",horizon))
+rownames(df.DM) <- c(rev(horizon), 
+                     paste0("GM_",rev(horizon)), 
+                     paste0("FC_",rev(horizon)), 
+                     paste0("PFC_",rev(horizon)), 
+                     paste0("CRIS_",rev(horizon)), 
+                     paste0("MOD_",rev(horizon)), 
+                     paste0("EXP_",rev(horizon)))
 openxlsx::write.xlsx(df.DM, "DM_M_greater_PM.xlsx", colNames = TRUE, rowNames = TRUE, overwrite = TRUE)
 
 
@@ -303,7 +309,13 @@ df.DM  <- data.frame(rbind(temp[,  1:9],
                            temp[,46:54],
                            temp[,55:63])) 
 df.DM[,3] = "."
-rownames(df.DM) <- c(horizon, paste0("GM_",horizon), paste0("FC_",horizon), paste0("PFC_",horizon), paste0("CRIS_",horizon), paste0("MOD_",horizon), paste0("EXP_",horizon))
+rownames(df.DM) <- c(rev(horizon), 
+                     paste0("GM_",rev(horizon)), 
+                     paste0("FC_",rev(horizon)), 
+                     paste0("PFC_",rev(horizon)), 
+                     paste0("CRIS_",rev(horizon)), 
+                     paste0("MOD_",rev(horizon)), 
+                     paste0("EXP_",rev(horizon)))
 openxlsx::write.xlsx(df.DM, "DM_M_greater_DFM.xlsx", colNames = TRUE, rowNames = TRUE, overwrite = TRUE)
 
 
@@ -439,5 +451,11 @@ df.DM  <- data.frame(rbind(temp[,  1:9],
                            temp[,46:54],
                            temp[,55:63])) 
 df.DM[,9] = "."
-rownames(df.DM) <- c(horizon, paste0("GM_",horizon), paste0("FC_",horizon), paste0("PFC_",horizon), paste0("CRIS_",horizon), paste0("MOD_",horizon), paste0("EXP_",horizon))
+rownames(df.DM) <- c(rev(horizon), 
+                     paste0("GM_",rev(horizon)), 
+                     paste0("FC_",rev(horizon)), 
+                     paste0("PFC_",rev(horizon)), 
+                     paste0("CRIS_",rev(horizon)), 
+                     paste0("MOD_",rev(horizon)), 
+                     paste0("EXP_",rev(horizon)))
 openxlsx::write.xlsx(df.DM, "DM_M_greater_RF.xlsx", colNames = TRUE, rowNames = TRUE, overwrite = TRUE)

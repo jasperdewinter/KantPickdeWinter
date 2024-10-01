@@ -1,7 +1,7 @@
 ################ Nowcasting GDP using machine learning methods #################
 #
 #     Dennis Kant, Andreas Pick and Jasper de Winter
-#     May 16, 2024
+#     October 1, 2024
 #
 ################################################################################
 #
@@ -23,6 +23,3 @@ source("RMSFE.r")
 # Reproduce Diebold-Mariano tests paper
 setwd(paste0(ROOT,"/Set-ups_public/"))                                                 
 source("DM_TEST.r")
-
-library(parallel)
-detectCores()

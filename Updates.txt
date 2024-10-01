@@ -1,0 +1,23 @@
+../Setups-public/
+* Replaced MIDAS-F.R with version in from AstA_KPW_ConfData directory ../Setups directory
+* Deleted TABLE_5_6.M replaced with TABLE_5_7.M from AstA_KPW_ConfData directory ../Setups directory
+* Copy paste Process_data_MIDASF from AstA_KPW_ConfData directory ../Setups/Support-code/ directory to ../Setups-public/Support-code. Adjusted Estimation.R accordingly (such that it loads this function)
+
+../dm
+* Replaced DM_TEST.xlsx with outcomes in DM_M_greater_DFM from AstA_KPW_ConfData directory ../dm directory
+
+../fcst
+* fcst results MIDAS-F.xlsx with MIDAS-F.xlsx from AstA_KPW_ConfData directory ../fcst directory
+
+../rmsfe
+* replace RMSFE_M.xlsx and RMSFE_Q.xlsx with files from  from AstA_KPW_ConfData directory ../rmsfe directory
+
+
+Adjustments:
+* Adjusted ESTIMATION.R in line with adjustment in AstA_KPW_ConfData directory (mainly no longer direct to different data)
+* Adjusted MIDAS-F.R such that it writes to Results_public instead of public, and writes to the right directories (fcsts, rmsfe)
+* Adjusted output directories in TABLE_5_7.m
+
+Todo:
+* Update Matlab setup for table 7 such that it produces table 7 in the paper (but then for the public data only); Andreas e-mailed me the setup on September 30th. Adjust in ConfData.
+* Also still need to adjust the DM test in PROJECT 11. KANT PICK DE WINTER. Just copy-paste DM test therein.
