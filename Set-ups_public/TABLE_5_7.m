@@ -3,17 +3,22 @@
 %
 %               Dennis Kant, Andreas Pick & Jasper de Winter
 %
-%                         Ocotober 1, 2024
+%                         October 1, 2024
 %
 %              This program does the following:
 %            a) Create output for Table 5,6 & 7
+%            b) Ouput displaued on screen
 %__________________________________________________________________________
-
 
 % housekeeping
 
-% adjust directory
-cd 'G:/EBO/ECMO/de Winter/Werk/Onderzoek/AstA_KPW/Results/fcst/';
+% Set ROOT directory !!!
+% ROOT = 'project/root/directory/';
+ROOT = 'G:/EBO/ECMO/de Winter/Werk/Onderzoek/AstA_KPW/';
+
+% Adjust filePath to read model forecasts
+filePath = fullfile(ROOT, '/Results/fcst/');
+cd(filePath)
 
 % Choose what to do
 dispBias = 1; % display forecast bias
@@ -33,8 +38,9 @@ rf = xlsread('fcst results RF.xlsx','Fcst Results');
 rs = xlsread('fcst results RS.xlsx','Fcst Results');
 rp = xlsread('fcst results RP.xlsx','Fcst Results');
 
-cd 'G:/EBO/ECMO/de Winter/Werk/Onderzoek/AstA_KPW_ConfData/Set-ups';
-% cd 'G:/EBO/ECMO/de Winter/Werk/Onderzoek/PROJECT 11  KANT PICK DE WINTER/Replication/Set-ups_public';
+% Adjust filePath to execute Diebold-Mariano tests
+filePath = fullfile(ROOT, '/Set-ups_public/');
+cd(filePath)
 
 % === calculate forecast error, rmsfe, bias^2 and variance ===================
 y = dfm(4:end-6,3); % realisation
