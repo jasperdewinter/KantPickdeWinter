@@ -23,6 +23,3 @@ source("RMSFE.r")
 # Reproduce Diebold-Mariano tests paper
 setwd(paste0(ROOT,"/Set-ups_public/"))                                                 
 source("DM_TEST.r")
-
-library(parallel)
-detectCores()
