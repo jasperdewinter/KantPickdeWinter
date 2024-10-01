@@ -13,8 +13,7 @@
 % housekeeping
 
 % Set ROOT directory !!!
-% ROOT = 'project/root/directory/';
-ROOT = 'G:/EBO/ECMO/de Winter/Werk/Onderzoek/AstA_KPW/';
+ROOT = 'project/root/directory/';
 
 % Adjust filePath to read model forecasts
 filePath = fullfile(ROOT, '/Results/fcst/');
