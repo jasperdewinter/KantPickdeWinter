@@ -1,7 +1,7 @@
-################################################# Estimation #################################################
+############################ Estimation ########################################
 #
 #     Dennis Kant, Andreas Pick and Jasper de Winter
-#     May 16, 2024
+#     October 1, 2024
 #
 ################################################################################
 #
@@ -56,6 +56,7 @@ library(readxl)
 library(forecast)
 library(openxlsx)
 library(rJava)
+
 options(java.parameters = "-Xmx28g")
 .jinit(classpath="myClasses.jar", parameters="-Xmx28g")
 num_gigs_ram_available = .jcall(.jnew("java/lang/Runtime"), "J", "maxMemory") / 1e9 
@@ -78,11 +79,6 @@ source('str2vec_quarter.r')
 source('Process_data_MIDASF.r')
 
 setwd(paste0(ROOT,"/Data_public/Regular"))     
-# if (modelName == "MIDAS-F") {
-#   setwd(paste0(ROOT,"/Data_public/MIDAS-F"))
-#   } else {
-#   setwd(paste0(ROOT,"/Data_public/Regular"))                                                                     
-#   }
 
 # Number of variables
 NumVars     = 56                                                                

@@ -1,7 +1,7 @@
 ################################ Diebold Mariano test##########################
 #
 #     Dennis Kant, Andreas Pick and Jasper de Winter
-#     May 16, 2024
+#     October 1, 2024
 #
 #     Reproduce DM-test in paper
 #
