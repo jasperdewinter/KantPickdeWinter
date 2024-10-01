@@ -1,19 +1,26 @@
 %__________________________________________________________________________
-%%                  TABLE 5 & 6 Kant, Pick and de Winter
+%%                  TABLE 5, 6 and 7 Kant, Pick and de Winter
 %
 %               Dennis Kant, Andreas Pick & Jasper de Winter
 %
-%                          May 10, 2024
+%                         Ocotober 1, 2024
 %
 %              This program does the following:
-%            a) Create input for Table 5 and 6 of the paper
+%            a) Create output for Table 5,6 & 7
 %__________________________________________________________________________
 
 
 % housekeeping
 
 % adjust directory
-cd 'G:/EBO/ECMO/de Winter/Werk/Onderzoek/AstA_KPW/Results_public/fcst/';
+cd 'G:/EBO/ECMO/de Winter/Werk/Onderzoek/AstA_KPW_ConfData/Results/fcst/';
+
+% Choose what to do
+dispBias = 1; % display forecast bias
+dispStd = 1; % display forecast standard deviation
+dispVariance = 0; % display forecast variance
+dispModelAve = 1; % display the model averaging results (always all data)
+dispDM = 1; % display the Diebold Mariano test statistics 
 
 % load all the forecasts
 dfm = xlsread('fcst results DFM.xlsx','Fcst Results');
@@ -26,7 +33,8 @@ rf = xlsread('fcst results RF.xlsx','Fcst Results');
 rs = xlsread('fcst results RS.xlsx','Fcst Results');
 rp = xlsread('fcst results RP.xlsx','Fcst Results');
 
-cd 'G:/EBO/ECMO/de Winter/Werk/Onderzoek/AstA_KPW/Set-ups_public';
+cd 'G:/EBO/ECMO/de Winter/Werk/Onderzoek/AstA_KPW_ConfData/Set-ups';
+% cd 'G:/EBO/ECMO/de Winter/Werk/Onderzoek/PROJECT 11  KANT PICK DE WINTER/Replication/Set-ups_public';
 
 % === calculate forecast error, rmsfe, bias^2 and variance ===================
 y = dfm(4:end-6,3); % realisation
@@ -81,9 +89,14 @@ ratio_absbias = absbias./(absbias(:,1)*ones(1,9));
 % min absbias
 min_absbias = min(ratio_absbias,[],2);
 
-% disp("Absolute forecast bias over the period 1992Q1-2018Q4")
-% disp([absbias(:,1) ratio_absbias(:,2:end)])
-% disp(ratio_absbias == min_absbias)
+if dispBias == 1
+  disp("Table 5. Absolute forecast bias over the period 1992Q1-2018Q4")
+  disp("Absolute bias")
+  disp([absbias(:,1) ratio_absbias(:,2:end)])
+  disp("Smallest bias")
+  disp(ratio_absbias == min_absbias)
+  disp('=========')
+end
 
 % var
 variance = nan(11,9);
@@ -93,9 +106,12 @@ ratio_var = variance./(variance(:,1)*ones(1,9));
 % min variance
 min_var = min(ratio_var,[],2);
 
-% disp("Variance")
-% disp([variance(:,1) ratio_var(:,2:end)])
-% disp(ratio_var == min_var)
+if dispVariance == 1
+  disp("Variance")
+  disp([variance(:,1) ratio_var(:,2:end)])
+  disp(ratio_var == min_var)
+  disp('=========')
+end
 
 stdev = nan(11,9);
 stdev(:,:) = std(err,1,1);
@@ -104,11 +120,14 @@ ratio_std = stdev./(stdev(:,1)*ones(1,9));
 % min variance
 min_std = min(ratio_std,[],2);
 
-% disp("Forecast standard devation over the period 1992Q1-2018Q4")
-% disp([stdev(:,1) ratio_std(:,2:end)])
-% disp(ratio_std == min_std)
-
-
+if dispStd == 1
+  disp("Table 6. Forecast standard devation over the period 1992Q1-2018Q4")
+  disp("Standard devation")
+  disp([stdev(:,1) ratio_std(:,2:end)])
+  disp('smallest std deviation')
+  disp(ratio_std == min_std)
+  disp('=========')
+end
 
 % === forecast averaging ===================================================
 
@@ -159,6 +178,7 @@ for t = 1:T
     end
   end
 end
+
 % expanding
 errip = yip - y*ones(1,11); %
 rmsfeip = sqrt(mean(errip.^2))';
@@ -194,11 +214,13 @@ for t = 1:T
     end
   end
 end
+
 % expanding
 errgr = ygr - y*ones(1,11); %
 rmsfegr = sqrt(mean(errgr.^2))';
 rmsfegr = flipud(rmsfegr);
 ratio_rmsfegr = rmsfegr./rmsfe(:,1);
+
 % rolling
 errgr40 = ygr40 - y*ones(1,11);
 rmsfegr40 = sqrt(mean(errgr40.^2))';
@@ -208,30 +230,48 @@ ratio_rmsfegr40 = rmsfegr40./rmsfe(:,1);
 errMA(:,:,4) = errgr;
 errMA(:,:,5) = errgr40;
 
+if dispModelAve == 1
+  disp('Tabel 7. Forecast accuracy of forecast combinations, RMSFEs')
+  disp([ratio_rmsfeew ratio_rmsfeip ratio_rmsfeip10 ratio_rmsfegr ratio_rmsfegr40])
+end
 
 % === DM tests ========
 % methods
 d = nan(T,1);
 s = nan(11,9);
 pval = nan(11,9);
+stars = zeros(11,5);
 for m = [1 2 4:9]
   for n = 1:11
     d(:) = err(:,n,3).^2 - err(:,n,m).^2;
     [s(n,m), sstar] = modifiedDieboldMariano (d, 1);
     pval(n,m) = 1-normcdf(s(n,m));
+    stars(n,m) = (pval(n,m) < 0.1) + (pval(n,m) < 0.05) + (pval(n,m) < 0.01);
   end
 end
 pval = flipud(pval);
+stars = flipud(stars);
 
 % model averages
 d2 = nan(T,1);
 s2 = nan(11,5 );
 pval2 = nan(11,5);
-for m = [1:5]
+stars2 = zeros(11,5);
+for m = 1:5
   for n = 1:11
     d2(:) = err(:,n,3).^2 - errMA(:,n,m).^2;
     [s2(n,m), sstar] = modifiedDieboldMariano (d2, 1);
     pval2(n,m) = 1-normcdf(s2(n,m));
+    stars2(n,m) = (pval2(n,m) < 0.1) + (pval2(n,m) < 0.05) + (pval2(n,m) < 0.01);
   end
 end
 pval2 = flipud(pval2);
+stars2 = flipud(stars2);
+
+if dispDM == 1
+  if dispModelAve == 1
+    disp('Tabel 7. Forecast accuracy of forecast combinations, DM-test results')
+    disp(pval2)
+    disp(stars2)
+  end
+end
