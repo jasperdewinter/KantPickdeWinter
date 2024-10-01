@@ -13,7 +13,7 @@
 % housekeeping
 
 % adjust directory
-cd 'G:/EBO/ECMO/de Winter/Werk/Onderzoek/AstA_KPW_ConfData/Results/fcst/';
+cd 'G:/EBO/ECMO/de Winter/Werk/Onderzoek/AstA_KPW/Results/fcst/';
 
 % Choose what to do
 dispBias = 1; % display forecast bias
