@@ -356,8 +356,9 @@ display: none;
 <h1>Nowcasting GDP using machine learning methods</h1>
 <p>This repository provides code to reproduce results in the paper
 “Nowcasting GDP using machine learning methods” by Dennis Kant, Andreas
-Pick (EUR) and Jasper de Winter (DNB). The scripts are most easily ran
-in Rstudio following these steps: Download or clone the repository and
+Pick (EUR) and Jasper de Winter (DNB) that is forthcoming in AStA
+Advances in Statistical Analysis. The scripts are most easily ran in
+Rstudio following these steps: Download or clone the repository and
 double-click AstA.proj to open the project in RStudio. Next, open Main
 and run the models and/or calculate DM-tests and report RMSFEs.</p>
 <ul>
@@ -370,25 +371,25 @@ all models underlying these results. The folder <code>graphs</code>
 contains pdf-files for Figure 3, 4 and 5;</li>
 <li>The setups in the folder <code>Set-ups_public</code>can be used to
 reproduce all modeloutcomes and figures in our paper;</li>
-<li>Run line 12–25 of the R-file <code>MAIN.R</code> to reproduce the
-outcomes in Table 2, 3 and 4;</li>
-<li>Run line 9–17 of the R-file <code>MAIN.R</code> to run one of the
-models in our paper (adjust index in line 16), i.e. AR(1) model,
-<code>AR</code>, Random Walk <code>RW</code>, Factor-augmented Mixed
-Data Sampling regression <code>MIDAS-F</code>, Least Absolute Shrinkage
-and Selection Operator<code>LASSO</code>, Elastic Net <code>EN</code>,
-Random Subspace regression <code>RS</code>, Random Projection
-<code>RP</code>, Random Forest<code>RF</code>.</li>
+<li>Run R-file <code>MAIN.R</code> to reproduce all outcomes in Table 2,
+3 and 4;</li>
+<li>Adjust line 16 of the R-file <code>MAIN.R</code> to produce outcomes
+for one of the models in our paper (adjust index in line 16), i.e. AR(1)
+model, <code>AR</code>, Random Walk <code>RW</code>, Factor-augmented
+Mixed Data Sampling regression <code>MIDAS-F</code>, Least Absolute
+Shrinkage and Selection Operator<code>LASSO</code>, Elastic Net
+<code>EN</code>, Random Subspace regression <code>RS</code>, Random
+Projections <code>RP</code>, Random Forest<code>RF</code>.</li>
 <li>the backcasts, nowcasts and forecasts of the models are written to
 the directory <code>Results_public\fcst</code>. Figures are written to
 <code>Results_public\graphs</code>. Auxiliary files written to
 <code>Results_public\other</code>;</li>
-<li>Run the Matlab file <code>TABLE_5_6.m</code> to reproduces Table 5
-and 6 of our paper;</li>
+<li>Run the Matlab file <code>TABLE_5_7.m</code> to reproduces Table 5,
+6 and 7 of our paper;</li>
 <li>For confidentiality reasons some series had to be removed from the
 data-file (notably all data-series in Table A.2 that only have codes and
 no links. The forecasts, RMSFEs and contributions will therefore deviate
-from the outcomes in the paper;</li>
+from the outcomes in the paper);</li>
 <li>The text-file <code>SessionInfo.txt</code>contains information on
 the R-(packages) and Matlab versions used to estimate the models.</li>
 </ul>

@@ -2,7 +2,8 @@
 
 This repository provides code to reproduce results in the paper "Nowcasting
 GDP using machine learning methods" by Dennis Kant, Andreas Pick (EUR) and
-Jasper de Winter (DNB). The scripts are most easily ran in Rstudio following
+Jasper de Winter (DNB) that is forthcoming in AStA Advances in Statistical 
+Analysis. The scripts are most easily ran in Rstudio following
 these steps: Download or clone the repository and double-click AstA.proj to
 open the project in RStudio. Next, open Main and run the models and/or
 calculate DM-tests and report RMSFEs.
