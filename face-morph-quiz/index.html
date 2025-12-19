@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Face Morph Quiz</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <header>
+      <p class="eyebrow">New repository demo</p>
+      <h1>Face Morph Quiz</h1>
+      <p class="lede">Drag the slider to reveal the two faces in the morph, then guess who is hidden. Each round mixes two of the illustrated portraits.</p>
+    </header>
+
+    <section class="morph-card">
+      <div class="face-stack" aria-live="polite">
+        <img id="base-face" class="face-layer" alt="Base face">
+        <img id="blend-face" class="face-layer" alt="Blended face">
+        <div class="slider-row">
+          <label for="morph-slider">Morph level: <span id="slider-value">50</span>%</label>
+          <input type="range" id="morph-slider" min="0" max="100" value="50">
+        </div>
+      </div>
+      <div class="question" aria-live="polite">
+        <p class="prompt" id="prompt"></p>
+        <div class="options" id="options"></div>
+      </div>
+    </section>
+
+    <div class="feedback" id="feedback" aria-live="polite"></div>
+    <button class="next" id="next-btn" type="button">Next round</button>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
