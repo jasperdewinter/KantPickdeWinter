@@ -56,12 +56,25 @@ const promptEl = document.getElementById("prompt");
 const optionsEl = document.getElementById("options");
 const feedbackEl = document.getElementById("feedback");
 const nextBtn = document.getElementById("next-btn");
+const progressEl = document.getElementById("progress");
+const scoreEl = document.getElementById("score");
 
 let currentIndex = 0;
+let score = 0;
+let hasAnswered = false;
 
 function setMorphOpacity(value) {
   sliderValue.textContent = value;
   blendFace.style.opacity = value / 100;
+}
+
+function updateStatus() {
+  const round = Math.min(currentIndex + 1, questions.length);
+  progressEl.textContent =
+    currentIndex >= questions.length
+      ? "All morphs complete"
+      : `Round ${round} of ${questions.length}`;
+  scoreEl.textContent = `Score: ${score}/${questions.length}`;
 }
 
 function shuffle(array) {
@@ -74,6 +87,7 @@ function shuffle(array) {
 }
 
 function renderQuestion() {
+  hasAnswered = false;
   const question = questions[currentIndex];
   promptEl.textContent = question.prompt;
 
@@ -84,6 +98,7 @@ function renderQuestion() {
 
   setMorphOpacity(50);
   slider.value = 50;
+  slider.disabled = false;
   feedbackEl.textContent = "";
   feedbackEl.className = "feedback";
 
@@ -97,9 +112,15 @@ function renderQuestion() {
     button.addEventListener("click", () => handleGuess(button, label));
     optionsEl.appendChild(button);
   });
+
+  nextBtn.disabled = true;
+  nextBtn.textContent = currentIndex === questions.length - 1 ? "Finish quiz" : "Next round";
+  updateStatus();
 }
 
 function handleGuess(button, guess) {
+  if (hasAnswered) return;
+  hasAnswered = true;
   const question = questions[currentIndex];
   const buttons = Array.from(optionsEl.querySelectorAll("button"));
   buttons.forEach((b) => {
@@ -108,6 +129,7 @@ function handleGuess(button, guess) {
 
   const isCorrect = guess === question.answer;
   if (isCorrect) {
+    score += 1;
     feedbackEl.textContent = `Nice! The morph hides ${question.answer}.`;
     feedbackEl.className = "feedback correct";
     button.classList.add("correct");
@@ -120,11 +142,43 @@ function handleGuess(button, guess) {
       correctButton.classList.add("correct");
     }
   }
+
+  nextBtn.disabled = false;
+  updateStatus();
 }
 
 function nextQuestion() {
-  currentIndex = (currentIndex + 1) % questions.length;
+  if (currentIndex >= questions.length) {
+    startQuiz();
+    return;
+  }
+
+  if (currentIndex === questions.length - 1) {
+    showSummary();
+    return;
+  }
+
+  currentIndex += 1;
   renderQuestion();
+}
+
+function startQuiz() {
+  currentIndex = 0;
+  score = 0;
+  renderQuestion();
+  feedbackEl.textContent = "";
+}
+
+function showSummary() {
+  slider.disabled = true;
+  feedbackEl.textContent = `Quiz complete! You scored ${score} out of ${questions.length}.`;
+  feedbackEl.className = "feedback correct";
+  promptEl.textContent = "Ready for another round? Hit restart to play again.";
+  optionsEl.innerHTML = "";
+  nextBtn.textContent = "Play again";
+  nextBtn.disabled = false;
+  currentIndex = questions.length;
+  updateStatus();
 }
 
 slider.addEventListener("input", (event) => {
